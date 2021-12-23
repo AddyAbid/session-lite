@@ -20,9 +20,9 @@ CREATE TABLE "public"."users" (
 
 
 CREATE TABLE "public"."posts" (
-	"createdAt" time with time zone NOT NULL,
-	"postId" serial NOT NULL,
-	"userId" int NOT NULL,
+	"createdAt" timestamptz(6) not null default now(),
+	"postId" serial,
+	"userId" int,
 	"description" TEXT NOT NULL,
 	"title" TEXT NOT NULL,
 	"imgUrl" TEXT NOT NULL,
