@@ -6,34 +6,34 @@ drop schema "public" cascade;
 
 create schema "public";
 
- CREATE TABLE "public.Users" (
+CREATE TABLE "public"."users" (
 	"userId" serial NOT NULL,
 	"username" TEXT NOT NULL UNIQUE,
 	"email" TEXT NOT NULL UNIQUE,
 	"password" TEXT NOT NULL,
-	"createdAt" time with time zone NOT NULL,
-	CONSTRAINT "Users_pk" PRIMARY KEY ("userId")
+	"createdAt" time with time zone NOT NULL default now(),
+	CONSTRAINT "users_pk" PRIMARY KEY ("userId")
 ) WITH (
   OIDS=FALSE
 );
 
 
 
-CREATE TABLE "public.Posts" (
+CREATE TABLE "public"."posts" (
 	"createdAt" time with time zone NOT NULL,
 	"postId" serial NOT NULL,
 	"userId" int NOT NULL,
 	"description" TEXT NOT NULL,
 	"title" TEXT NOT NULL,
 	"imgUrl" TEXT NOT NULL,
-	CONSTRAINT "Posts_pk" PRIMARY KEY ("postId")
+	CONSTRAINT "posts_pk" PRIMARY KEY ("postId")
 ) WITH (
   OIDS=FALSE
 );
 
 
 
-CREATE TABLE "public.messages" (
+CREATE TABLE "public"."messages" (
 	"message" TEXT NOT NULL,
 	"userId" int NOT NULL,
 	"postId" int NOT NULL
@@ -43,7 +43,7 @@ CREATE TABLE "public.messages" (
 
 
 
-CREATE TABLE "public.Saved" (
+CREATE TABLE "public"."saved" (
 	"postId" int NOT NULL,
 	"userId" int NOT NULL
 ) WITH (
@@ -53,10 +53,10 @@ CREATE TABLE "public.Saved" (
 
 
 
-ALTER TABLE "Posts" ADD CONSTRAINT "Posts_fk0" FOREIGN KEY ("userId") REFERENCES "Users"("userId");
+ALTER TABLE "posts" ADD CONSTRAINT "posts_fk0" FOREIGN KEY ("userId") REFERENCES "users"("userId");
 
-ALTER TABLE "messages" ADD CONSTRAINT "messages_fk0" FOREIGN KEY ("userId") REFERENCES "Users"("userId");
-ALTER TABLE "messages" ADD CONSTRAINT "messages_fk1" FOREIGN KEY ("postId") REFERENCES "Posts"("postId");
+ALTER TABLE "messages" ADD CONSTRAINT "messages_fk0" FOREIGN KEY ("userId") REFERENCES "users"("userId");
+ALTER TABLE "messages" ADD CONSTRAINT "messages_fk1" FOREIGN KEY ("postId") REFERENCES "posts"("postId");
 
-ALTER TABLE "Saved" ADD CONSTRAINT "Saved_fk0" FOREIGN KEY ("postId") REFERENCES "Posts"("postId");
-ALTER TABLE "Saved" ADD CONSTRAINT "Saved_fk1" FOREIGN KEY ("userId") REFERENCES "Users"("userId");
+ALTER TABLE "saved" ADD CONSTRAINT "saved_fk0" FOREIGN KEY ("postId") REFERENCES "posts"("postId");
+ALTER TABLE "saved" ADD CONSTRAINT "saved_fk1" FOREIGN KEY ("userId") REFERENCES "users"("userId");
