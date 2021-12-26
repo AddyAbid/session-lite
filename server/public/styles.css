@@ -1,0 +1,41 @@
+body {
+  background-color: #f6f6f6;
+}
+
+.placeholder-img {
+  width: 100%;
+  cursor: pointer;
+}
+
+.mt-3rem {
+  margin-top: 3rem;
+}
+
+.roboto-4 {
+  font-family: Roboto, sans-serif, serif;
+  font-weight: 400;
+}
+
+.width-100 {
+  width: 100%;
+}
+
+.mt-1rem {
+  margin-top: 1rem;
+}
+
+.raleway-500 {
+  font-family: Raleway, sans-serif;
+  font-weight: 500;
+  font-size: 17px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: 1px solid;
+  cursor: pointer;
+  color: white;
+  background-color: #dd8f34;
+}
+
+.resize-none {
+  resize: none;
+}
