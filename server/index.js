@@ -37,6 +37,14 @@ app.post('/api/sessions', uploadsMiddleware, (req, res, next) => {
     .catch(err => next(err));
 });
 
+app.get('/api/sessions', (req, res, next) => {
+  const sql = 'select * from "posts" order by "postId"';
+  db.query(sql)
+    .then(response => {
+      res.status(200).json(response.rows[0]);
+    });
+});
+
 app.use(errorMiddleware);
 
 app.listen(process.env.PORT, () => {
