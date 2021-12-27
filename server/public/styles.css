@@ -15,12 +15,43 @@ body {
   font-weight: 400;
 }
 
+.roboto-5 {
+  font-family: Roboto, sans-serif, serif;
+  font-weight: 500;
+}
+
 .width-100 {
   width: 100%;
 }
 
 .mt-1rem {
   margin-top: 1rem;
+}
+
+.margin-lr {
+  margin: 0 1rem;
+}
+
+.border-5 {
+  border-radius: 5px;
+}
+
+.margin-0 {
+  margin: 0;
+}
+
+.text-align-center {
+  text-align: center;
+}
+
+.raleway-500-price {
+  font-family: Raleway, sans-serif;
+  font-weight: 500;
+}
+
+.raleway-400-price {
+  font-family: Raleway, sans-serif;
+  font-weight: 500;
 }
 
 .raleway-500 {

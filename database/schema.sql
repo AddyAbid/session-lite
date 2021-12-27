@@ -25,6 +25,7 @@ CREATE TABLE "public"."posts" (
 	"userId" int,
 	"description" TEXT NOT NULL,
 	"title" TEXT NOT NULL,
+  "price" TEXT NOT NULL,
 	"imgUrl" TEXT NOT NULL,
 	CONSTRAINT "posts_pk" PRIMARY KEY ("postId")
 ) WITH (
