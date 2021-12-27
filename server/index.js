@@ -42,7 +42,8 @@ app.get('/api/sessions', (req, res, next) => {
   db.query(sql)
     .then(response => {
       res.status(200).json(response.rows[0]);
-    });
+    })
+    .catch(err => next(err));
 });
 
 app.use(errorMiddleware);
