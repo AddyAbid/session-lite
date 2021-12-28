@@ -1,8 +1,47 @@
 import React from 'react';
-import Home from './pages/home';
-
+import parseRoute from './lib/parse-route';
+import MarketPlace from './pages/market';
+import FormPage from './pages/create-form';
+import AppDrawer from './components/drawer';
+import Icons from './components/icons';
 export default class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      route: parseRoute(window.location.hash)
+    };
+  }
+
+  componentDidMount() {
+
+    window.addEventListener('hashchange', () => {
+
+      this.setState({
+        route: parseRoute(window.location.hash)
+      });
+    });
+  }
+
+  renderPage() {
+    const { route } = this.state;
+    if (route.path === '' || route.path === 'marketplace') {
+      return <MarketPlace />;
+    }
+    if (route.path === 'form') {
+      return <FormPage />;
+    }
+
+  }
+
   render() {
-    return <Home />;
+    return (
+    <>
+
+    <AppDrawer />
+        {this.renderPage()}
+     <Icons route={this.state.route}/>
+
+    </>
+    );
   }
 }

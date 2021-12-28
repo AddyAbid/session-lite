@@ -22,17 +22,26 @@ const jsonMiddleware = express.json();
 app.use(jsonMiddleware);
 
 app.post('/api/sessions', uploadsMiddleware, (req, res, next) => {
-  const { title, description } = req.body;
+  const { title, description, price } = req.body;
   if (!title || !description) {
     throw new ClientError(400, 'title and description are required fields');
   }
   const url = `/images/${req.file.filename}`;
-  const sql = 'insert into "posts" ("title", "description", "imgUrl", "userId") values ($1, $2, $3, $4) returning *';
-  const params = [title, description, url, 1];
+  const sql = 'insert into "posts" ("title", "description", "price", "imgUrl", "userId") values ($1, $2, $3, $4, $5) returning *';
+  const params = [title, description, price, url, 1];
 
   db.query(sql, params)
     .then(response => {
       res.status(201).json(response.rows[0]);
+    })
+    .catch(err => next(err));
+});
+
+app.get('/api/sessions', (req, res, next) => {
+  const sql = 'select * from "posts" order by "postId"';
+  db.query(sql)
+    .then(response => {
+      res.status(200).json(response.rows);
     })
     .catch(err => next(err));
 });
