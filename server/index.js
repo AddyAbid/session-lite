@@ -46,6 +46,28 @@ app.get('/api/sessions', (req, res, next) => {
     .catch(err => next(err));
 });
 
+app.get('/api/sessions/:postId', (req, res, next) => {
+  const postId = Number(req.params.postId);
+  if (!Number(postId) || postId < 1) {
+    res.status(400).json({ error: 'post Id must be a positive integer' });
+
+  }
+  const sql = 'select "title", "description", "price", "imgUrl" from "posts" where "postId" = $1';
+  const params = [postId];
+  db.query(sql, params)
+    .then(response => {
+      const post = response.rows[0];
+      if (!post) {
+        res.status(400).json({
+          error: `cannot find post with postId ${postId}`
+        });
+        return;
+      }
+      res.json(post);
+    })
+    .catch(err => next(err));
+});
+
 app.use(errorMiddleware);
 
 app.listen(process.env.PORT, () => {

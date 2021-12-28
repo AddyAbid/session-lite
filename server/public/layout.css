@@ -15,6 +15,10 @@
   margin: 1rem;
 }
 
+.row-details {
+  display: flex;
+}
+
 .pt-8 {
   padding-top: 8px;
 }
@@ -125,6 +129,12 @@
   .mr-2rem-desktop {
     margin: 0.4rem 1rem;
   }
+
+  .object-fit-market {
+    height: 125px;
+    width: 100%;
+    object-fit: cover;
+  }
 }
 
 @media only screen and (max-width: 680px) {
@@ -158,5 +168,10 @@
 
   .hide-mobile {
     display: none;
+  }
+
+  .object-fit-market {
+    width: 100%;
+    height: 175px;
   }
 }

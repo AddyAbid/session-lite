@@ -4,6 +4,7 @@ import MarketPlace from './pages/market';
 import FormPage from './pages/create-form';
 import AppDrawer from './components/drawer';
 import Icons from './components/icons';
+import Details from './pages/post-details';
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -30,7 +31,10 @@ export default class App extends React.Component {
     if (route.path === 'form') {
       return <FormPage />;
     }
-
+    if (route.path === 'posts') {
+      const postId = route.params.get('postId');
+      return <Details postId={postId}/>;
+    }
   }
 
   render() {

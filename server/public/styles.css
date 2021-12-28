@@ -131,6 +131,33 @@ body {
   color: #dd8f34;
 }
 
+.border-top {
+  border-top: 1px solid rgb(190, 190, 190);
+}
+
+.raleway-800 {
+  font-family: Raleway, sans-serif;
+  font-weight: 800;
+}
+
+.raleway-300 {
+  font-family: Raleway, sans-serif;
+  font-weight: 300;
+  font-size: 1.4rem;
+}
+
+.raleway-400-sm {
+  font-family: Raleway, sans-serif;
+  font-weight: 400;
+  font-size: 1rem;
+}
+
+.object-fit {
+  height: 250px;
+  width: 100%;
+  object-fit: cover;
+}
+
 i {
   cursor: pointer;
   margin: 1rem;
