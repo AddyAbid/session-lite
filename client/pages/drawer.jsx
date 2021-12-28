@@ -16,7 +16,7 @@ class AppDrawer extends React.Component {
 
   render() {
     return (
-      <div >
+      <div className='hide-mobile'>
 
         <i className="fas fa-bars fa-2x" onClick={this.handleClickDrawer} id={this.state.drawerOpen ? '' : 'open'}></i>
         <div className="row margin-0" id={this.state.drawerOpen ? 'open' : 'hidden'}>

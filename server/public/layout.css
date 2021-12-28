@@ -28,6 +28,10 @@
   width: 100%;
 }
 
+.column-fifth {
+  width: 20%;
+}
+
 .relative {
   position: relative;
 }

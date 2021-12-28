@@ -115,6 +115,14 @@ body {
   font-size: 1.2rem;
 }
 
+.absolute-bottom-icons {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #f0f0f0;
+}
+
 #hidden {
   display: none;
 }
