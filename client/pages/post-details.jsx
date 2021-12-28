@@ -25,25 +25,37 @@ class Details extends React.Component {
             <div className='col-half'>
               <div className='img-upload'>
                 <img
-                  className='placeholder-img'
-
+                  className='object-fit'
                   src={imgUrl} />
-
               </div>
             </div>
+
             <div className='col-half pd-left-2rem mt-mobile'>
-              <h3>{title}</h3>
-              <h5>{price}</h5>
+              <div className='row-details'>
+                <div className='col-full'>
+                  <div className='border-top'></div>
+                  <h3 className='raleway-800'>{title}</h3>
+                  <h4 className='raleway-300'>${price}/hour</h4>
+               </div>
+              </div>
+              <div className='row-details'>
+                <div className='col-full'>
+                <div className='border-top'></div>
+                </div>
+              </div>
             </div>
+          <div className='border-top'></div>
           </div>
           <div className='row mt-2rem'>
             <div className='col-full'>
-              <h4>{description}</h4>
-            </div>
-            <div className='col-full'>
-              <div className='submit-button text-align-right-center mt-1rem'>
-                <button type='submit' className='mobile-width-100 raleway-500'>Message Artist</button>
+              <div className='border-top hide-mobile'></div>
+                <div>
+                  <h3 className='raleway-800'>Description</h3>
+                </div>
+                <h4 className='raleway-400-sm'>{description}</h4>
               </div>
+            <div className='col-full'>
+
             </div>
           </div>
 
