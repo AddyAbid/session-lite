@@ -131,10 +131,6 @@ body {
   color: #dd8f34;
 }
 
-#hidden {
-  display: none;
-}
-
 i {
   cursor: pointer;
   margin: 1rem;

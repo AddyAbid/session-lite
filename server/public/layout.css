@@ -88,6 +88,10 @@
   margin-top: 2rem;
 }
 
+.hidden {
+  display: none;
+}
+
 @media only screen and (min-width: 680px) {
   .col-half {
     width: 50%;

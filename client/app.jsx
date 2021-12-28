@@ -2,8 +2,8 @@ import React from 'react';
 import parseRoute from './lib/parse-route';
 import MarketPlace from './pages/market';
 import FormPage from './pages/create-form';
-import AppDrawer from './pages/drawer';
-import Icons from './pages/icons';
+import AppDrawer from './components/drawer';
+import Icons from './components/icons';
 export default class App extends React.Component {
   constructor(props) {
     super(props);
