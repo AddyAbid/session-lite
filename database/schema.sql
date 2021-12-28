@@ -36,8 +36,9 @@ CREATE TABLE "public"."posts" (
 
 CREATE TABLE "public"."messages" (
 	"message" TEXT NOT NULL,
-	"userId" int NOT NULL,
-	"postId" int NOT NULL
+	"senderId" int NOT NULL,
+	"postId" int NOT NULL,
+  "recipientId" int NOT NULL
 ) WITH (
   OIDS=FALSE
 );
@@ -56,8 +57,9 @@ CREATE TABLE "public"."saved" (
 
 ALTER TABLE "posts" ADD CONSTRAINT "posts_fk0" FOREIGN KEY ("userId") REFERENCES "users"("userId");
 
-ALTER TABLE "messages" ADD CONSTRAINT "messages_fk0" FOREIGN KEY ("userId") REFERENCES "users"("userId");
+ALTER TABLE "messages" ADD CONSTRAINT "messages_fk0" FOREIGN KEY ("senderId") REFERENCES "users"("userId");
 ALTER TABLE "messages" ADD CONSTRAINT "messages_fk1" FOREIGN KEY ("postId") REFERENCES "posts"("postId");
+ALTER TABLE "messages" ADD CONSTRAINT "messages_fk2" FOREIGN KEY ("recipientId") REFERENCES "users"("userId");
 
 ALTER TABLE "saved" ADD CONSTRAINT "saved_fk0" FOREIGN KEY ("postId") REFERENCES "posts"("postId");
 ALTER TABLE "saved" ADD CONSTRAINT "saved_fk1" FOREIGN KEY ("userId") REFERENCES "users"("userId");

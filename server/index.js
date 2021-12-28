@@ -67,6 +67,24 @@ app.get('/api/sessions/:postId', (req, res, next) => {
     })
     .catch(err => next(err));
 });
+app.post('/api/sessions/:recipientId', (req, res, next) => {
+  const offer = req.body.offer;
+  const postId = Number(req.body.postId);
+  const recipientId = Number(req.params.recipientId);
+  if (!offer) {
+    res.status(400).json({
+      error: 'offer is a required field'
+    });
+  }
+  const sql = 'insert into "messages" ("message", "recipientId", "postId", "senderId") values ($1, $2, $3, $4) returning * ';
+  const params = [offer, recipientId, postId, 2];
+  db.query(sql, params)
+    .then(response => {
+      const message = response.rows[0].message;
+      res.json(message);
+    })
+    .catch(err => next(err));
+});
 
 app.use(errorMiddleware);
 
