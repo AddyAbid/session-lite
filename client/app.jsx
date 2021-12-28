@@ -24,12 +24,10 @@ export default class App extends React.Component {
 
   renderPage() {
     const { route } = this.state;
-
     if (route.path === '' || route.path === 'marketplace') {
       return <MarketPlace />;
     }
     if (route.path === 'form') {
-
       return <FormPage />;
     }
 
@@ -41,7 +39,7 @@ export default class App extends React.Component {
 
     <AppDrawer />
         {this.renderPage()}
-     <Icons />
+     <Icons route={this.state.route}/>
 
     </>
     );
