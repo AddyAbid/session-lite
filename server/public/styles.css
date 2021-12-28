@@ -101,6 +101,10 @@ body {
   cursor: pointer;
 }
 
+.hamburger-menu-orange {
+  color: #dd8f34;
+}
+
 .raleway-500-menu {
   font-family: Raleway, sans-serif;
   font-weight: 500;
@@ -123,6 +127,10 @@ body {
   background-color: #f0f0f0;
 }
 
+.orange {
+  color: #dd8f34;
+}
+
 #hidden {
   display: none;
 }
@@ -130,4 +138,5 @@ body {
 i {
   cursor: pointer;
   margin: 1rem;
+  color: black;
 }

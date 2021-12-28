@@ -18,10 +18,11 @@ class AppDrawer extends React.Component {
     return (
       <div className='hide-mobile'>
 
-        <i className="fas fa-bars fa-2x" onClick={this.handleClickDrawer} id={this.state.drawerOpen ? '' : 'open'}></i>
+        <i className="fas fa-bars fa-2x hamburger-menu-orange" onClick={this.handleClickDrawer} id={this.state.drawerOpen ? '' : 'open'}></i>
         <div className="row margin-0" id={this.state.drawerOpen ? 'open' : 'hidden'}>
           <div className="column-25">
             <h1 className='raleway-500-menu'>Menu</h1>
+            <a href='#marketplace' className="block mb raleway-size" onClick={this.handleClickDrawer}>Marketplace</a>
             <a href='#form' className="block mb raleway-size" onClick={this.handleClickDrawer}>Post a Session</a>
           </div>
           <div className="column-75 overlay" onClick={this.handleClickDrawer}>
