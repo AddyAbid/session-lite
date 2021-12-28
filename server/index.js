@@ -56,9 +56,16 @@ app.get('/api/sessions/:postId', (req, res, next) => {
   const params = [postId];
   db.query(sql, params)
     .then(response => {
-      // const post = response.rows[0];
-    });
-
+      const post = response.rows[0];
+      if (!post) {
+        res.status(400).json({
+          error: `cannot find post with postId ${postId}`
+        });
+        return;
+      }
+      res.json(post);
+    })
+    .catch(err => next(err));
 });
 
 app.use(errorMiddleware);
