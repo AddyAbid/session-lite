@@ -34,9 +34,9 @@ class ShowModal extends React.Component {
       })
       .then(response => response.json())
       .then(res => {
+        this.props.close();
       })
       .catch(err => console.error(err));
-    this.props.close();
   }
 
   render() {
