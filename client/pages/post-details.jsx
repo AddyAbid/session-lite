@@ -7,16 +7,17 @@ class Details extends React.Component {
       post: null,
       modal: false
     };
-    this.handleClick = this.handleClick.bind(this);
+    this.closeModal = this.closeModal.bind(this);
   }
 
   componentDidMount() {
     fetch(`/api/sessions/${this.props.postId}`)
       .then(res => res.json())
-      .then(post => this.setState({ post }));
+      .then(post => this.setState({ post }))
+      .catch(err => console.error(err));
   }
 
-  handleClick(event) {
+  closeModal(event) {
     this.setState({ modal: !this.state.modal });
   }
 
@@ -27,7 +28,7 @@ class Details extends React.Component {
     return (
 
       <div className='container'>
-        {this.state.modal && <ShowModal/>}
+        {this.state.modal && <ShowModal close={this.closeModal}/>}
           <div className='row mt-3rem'>
             <div className='col-half'>
               <div className='img-upload'>
@@ -50,7 +51,7 @@ class Details extends React.Component {
                   <div className='border-top'></div>
 
                     <div className='submit-button text-align-center mt-1rem hide-mobile'>
-                     <button onClick={this.handleClick} className='mobile-width-100 raleway-500 pd-btn'>Send Offer</button>
+                     <button onClick={this.closeModal} className='mobile-width-100 raleway-500 pd-btn'>Send Offer</button>
                     </div>
 
                 </div>
@@ -69,7 +70,7 @@ class Details extends React.Component {
             <div className='col-full'>
 
                 <div className='submit-button text-align-center mt-1rem hide-desktop'>
-                <a href='#send-offer'> <button className='mobile-width-100 raleway-500 pd-btn'>Send Offer</button> </a>
+              <button onClick={this.closeModal} className='mobile-width-100 raleway-500 pd-btn'>Send Offer</button>
                 </div>
 
             </div>

@@ -1,16 +1,19 @@
 import React from 'react';
+
 class ShowModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      offerAmount: '',
-      modal: true
+      offerAmount: ''
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+
   }
 
   handleSubmit(event) {
+
     event.preventDefault();
     const formData = new FormData();
     formData.append('message', this.state.offerAmount);
@@ -23,14 +26,19 @@ class ShowModal extends React.Component {
         this.setState({ offerAmount: '' });
       })
       .catch(err => console.error(err));
-
+    this.props.close();
   }
 
   handleChange(event) {
     this.setState({ offerAmount: event.target.value });
   }
 
+  handleClick(event) {
+    this.props.close();
+  }
+
   render() {
+
     return (
     <form onSubmit={this.handleSubmit}>
       <div className="modal">
@@ -54,7 +62,7 @@ class ShowModal extends React.Component {
               </div>
               <div className='modal-row mt-2rem-modal'>
                 <div className='col-50 ta-r pd-r-3rem'>
-                  <button className='cancel-button'>Cancel</button>
+                  <button type='button' onClick={this.handleClick} className='cancel-button'>Cancel</button>
                 </div>
                 <div className='col-50 ta-l pd-l-3rem'>
                   <button type='submit' className='submit-offer-button'>Send Offer</button>
@@ -68,4 +76,5 @@ class ShowModal extends React.Component {
     );
   }
 }
+
 export default ShowModal;
