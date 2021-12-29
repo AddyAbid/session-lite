@@ -73,7 +73,7 @@ app.post('/api/sessions/:recipientId', (req, res, next) => {
     throw new ClientError(400, 'message is required fields');
   }
   const sql = 'insert into "messages" ("message", "recipientId", "postId", "senderId") values ($1, $2, $3, $4) returning * ';
-  const params = [message, 1, 4, 2];
+  const params = [message, 1, 2, 2];
   db.query(sql, params)
     .then(response => {
       const [message] = response.rows;
