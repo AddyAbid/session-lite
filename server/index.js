@@ -5,7 +5,8 @@ const errorMiddleware = require('./error-middleware');
 const staticMiddleware = require('./static-middleware');
 const uploadsMiddleware = require('./uploads-middleware');
 const ClientError = require('./client-error');
-
+const argon2 = require('argon2');
+const jwt = require('jsonwebtoken');
 const db = new pg.Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: {
@@ -84,6 +85,40 @@ app.post('/api/sessions/:recipientId', (req, res, next) => {
     .catch(err => next(err));
 });
 
+app.post('/api/auth/sign-in', (req, res, next) => {
+  const { username, password } = req.body;
+  if (!username || !password) {
+    throw new ClientError(401, 'invalid login');
+  }
+  const sql = 'select "username", "userId", "password" from "users" where username = $1';
+  const params = [username];
+  db.query(sql, params)
+    .then(result => {
+      if (!username) {
+        throw new ClientError(401, 'invalid login');
+      }
+      const hashedPassword = result.rows[0].password;
+      const userId = result.rows[0].userId;
+      argon2
+        .verify(hashedPassword, password)
+        .then(response => {
+          if (!result) {
+            throw new ClientError(401, 'invalid login');
+          }
+          const payload = {
+            user: {
+              userId: userId,
+              username: username
+            }
+          };
+          const token = jwt.sign(payload, process.env.TOKEN_SECRET);
+          payload.token = token;
+          res.status(201).json(payload);
+        })
+        .catch(err => next(err));
+    })
+    .catch(err => next(err));
+});
 app.use(errorMiddleware);
 
 app.listen(process.env.PORT, () => {
