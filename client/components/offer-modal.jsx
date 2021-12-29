@@ -12,20 +12,7 @@ class ShowModal extends React.Component {
 
   }
 
-  handleSubmit(event) {
-
-    event.preventDefault();
-    const formData = new FormData();
-    formData.append('message', this.state.offerAmount);
-    fetch('/api/session/1', {
-      method: 'POST',
-      body: formData
-    })
-      .then(res => res.json())
-      .then(response => {
-        this.setState({ offerAmount: '' });
-      })
-      .catch(err => console.error(err));
+  handleClick(event) {
     this.props.close();
   }
 
@@ -33,7 +20,22 @@ class ShowModal extends React.Component {
     this.setState({ offerAmount: event.target.value });
   }
 
-  handleClick(event) {
+  handleSubmit(event) {
+    event.preventDefault();
+    const offerObj = {};
+    offerObj.offerAmount = this.state.offerAmount;
+    fetch('/api/sessions/2',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(offerObj)
+      })
+      .then(response => response.json())
+      .then(res => {
+      })
+      .catch(err => console.error(err));
     this.props.close();
   }
 
