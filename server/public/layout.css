@@ -9,6 +9,10 @@
   margin: 0 3rem;
 }
 
+.modal-row {
+  display: flex;
+}
+
 .market-row {
   display: flex;
   flex-wrap: wrap;
@@ -34,6 +38,10 @@
 
 .column-fifth {
   width: 20%;
+}
+
+.col-50 {
+  width: 50%;
 }
 
 .relative {
@@ -65,6 +73,10 @@
 
 .display-block {
   display: block;
+}
+
+.mt-2rem-modal {
+  margin-top: 2rem;
 }
 
 .justify-content-center {
