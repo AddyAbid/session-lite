@@ -158,8 +158,73 @@ body {
   object-fit: cover;
 }
 
+.pd-btn {
+  padding: 5px 115px;
+}
+
+.modal {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.479);
+  z-index: 1000;
+}
+
+.text-box {
+  background-color: white;
+  position: fixed;
+  width: 400px;
+  height: 150px;
+  left: 50%;
+  top: 40%;
+  transform: translate(-50%, -50%);
+  border-radius: 5px;
+}
+
+.ta-l {
+  text-align: left;
+}
+
+.ta-r {
+  text-align: right;
+}
+
+.pd-r-3rem {
+  padding-right: 3rem;
+}
+
+.pd-l-3rem {
+  padding-left: 3rem;
+}
+
+.cancel-button {
+  background-color: white;
+  color: #dd8f34;
+  border-radius: 5px;
+  border: 1px solid #dd8f34;
+  font-size: 1.2rem;
+}
+
+.submit-offer-button {
+  background-color: #dd8f34;
+  color: white;
+  border-radius: 5px;
+  border: 1px solid #dd8f34;
+  font-size: 1.2rem;
+}
+
+.modal-input {
+  width: 100px;
+}
+
 i {
   cursor: pointer;
   margin: 1rem;
   color: black;
+}
+
+button {
+  cursor: pointer;
 }

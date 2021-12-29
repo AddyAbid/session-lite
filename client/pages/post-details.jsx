@@ -1,26 +1,34 @@
 import React from 'react';
-
+import ShowModal from '../components/offer-modal';
 class Details extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      post: null
+      post: null,
+      modal: false
     };
-
+    this.closeModal = this.closeModal.bind(this);
   }
 
   componentDidMount() {
     fetch(`/api/sessions/${this.props.postId}`)
       .then(res => res.json())
-      .then(post => this.setState({ post }));
+      .then(post => this.setState({ post }))
+      .catch(err => console.error(err));
+  }
+
+  closeModal(event) {
+    this.setState({ modal: !this.state.modal });
   }
 
   render() {
+
     if (!this.state.post) return null;
     const { title, description, price, imgUrl } = this.state.post;
     return (
-      <div className='container'>
 
+      <div className='container'>
+        {this.state.modal && <ShowModal close={this.closeModal}/>}
           <div className='row mt-3rem'>
             <div className='col-half'>
               <div className='img-upload'>
@@ -40,7 +48,12 @@ class Details extends React.Component {
               </div>
               <div className='row-details'>
                 <div className='col-full'>
-                <div className='border-top'></div>
+                  <div className='border-top'></div>
+
+                    <div className='submit-button text-align-center mt-1rem hide-mobile'>
+                     <button onClick={this.closeModal} className='mobile-width-100 raleway-500 pd-btn'>Send Offer</button>
+                    </div>
+
                 </div>
               </div>
             </div>
@@ -56,10 +69,14 @@ class Details extends React.Component {
               </div>
             <div className='col-full'>
 
+                <div className='submit-button text-align-center mt-1rem hide-desktop'>
+              <button onClick={this.closeModal} className='mobile-width-100 raleway-500 pd-btn'>Send Offer</button>
+                </div>
+
             </div>
           </div>
+        </div>
 
-      </div>
     );
   }
 }
