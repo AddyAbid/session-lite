@@ -5,7 +5,8 @@ class SignIn extends React.Component {
     super(props);
     this.state = {
       username: '',
-      password: ''
+      password: '',
+      incorrectPassword: false
     };
     this.handleUsername = this.handleUsername.bind(this);
     this.handlePassword = this.handlePassword.bind(this);
@@ -24,7 +25,15 @@ class SignIn extends React.Component {
     })
       .then(resolve => resolve.json())
       .then(res => {
+        const token = res.token;
+        if (token) {
+          window.location.hash = 'marketplace';
+          this.props.signIn(res);
 
+        } else {
+          window.location.hash = 'sign-in';
+          this.setState({ incorrectPassword: true });
+        }
       })
       .catch(err => console.error(err));
   }
@@ -38,6 +47,7 @@ class SignIn extends React.Component {
   }
 
   render() {
+
     return (
       <div className='container'>
         <div className='sign-in-form'>
@@ -67,6 +77,7 @@ class SignIn extends React.Component {
                   onChange={this.handlePassword}
                   placeholder='password'
                 />
+                <p className='margin-0 roboto-4'>{this.state.incorrectPassword ? 'incorrect username or password' : ''}</p>
                 <button type='submit' className='mobile-width-100 raleway-500 width-100 '>Sign in</button>
               </form>
             </div>

@@ -6,6 +6,7 @@ class AppDrawer extends React.Component {
       drawerOpen: false
     };
     this.handleClickDrawer = this.handleClickDrawer.bind(this);
+
   }
 
   handleClickDrawer() {
@@ -26,7 +27,7 @@ class AppDrawer extends React.Component {
           <div className='display-inline'><h1 className='display-inline raleway-400-header'>sessionLite</h1></div>
         </div>
         <div className='column-15 text-align-center'>
-         <a href='#sign-in'><button className='sign-in-button hide-mobile'>Sign in</button></a>
+         <a href='#sign-in'><button className='sign-in-button hide-mobile' >Sign in</button></a>
         </div>
         <div className={this.state.drawerOpen ? 'row margin-0' : 'hidden'}>
           <div className="column-25">
