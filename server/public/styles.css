@@ -72,16 +72,18 @@ body {
 
 .overlay {
   background-color: rgba(0, 0, 0, 0.479);
-  height: 100vh;
-  top: 0;
+  bottom: 0;
+  right: 0;
   left: 250px;
+  top: 0;
   position: absolute;
 }
 
 .column-25 {
   width: 250px;
   top: 0;
-  height: 100vh;
+  bottom: 0;
+  left: 0;
   text-align: left;
   padding-left: 20px;
   position: absolute;
@@ -90,10 +92,6 @@ body {
 
 .mb {
   margin-bottom: 2rem;
-}
-
-.column-75 {
-  width: 100%;
 }
 
 .block {
@@ -217,6 +215,44 @@ body {
 
 .modal-input {
   width: 100px;
+}
+
+.display-inline {
+  display: inline;
+}
+
+.raleway-400-header {
+  font-family: Raleway, sans-serif;
+  color: #dd8f34;
+  font-weight: 400;
+}
+
+.sign-in-button {
+  color: white;
+  background-color: #dd8f34;
+  font-family: Raleway, sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  border: 1px solid #dd8f34;
+  border-radius: 5px;
+  padding: 5px 15px;
+}
+
+.mb-3rem {
+  margin-bottom: 3rem;
+}
+
+.sign-in-input {
+  outline: 0;
+  border-width: 0 0 2px;
+  background-color: #f6f6f6;
+  border-color: #cecece;
+  font-family: Raleway, sans-serif;
+  font-size: 1rem;
+}
+
+.mt-8rem {
+  margin-top: 8rem;
 }
 
 i {

@@ -5,7 +5,8 @@ class Details extends React.Component {
     super(props);
     this.state = {
       post: null,
-      modal: false
+      modal: false,
+      postId: null
     };
     this.closeModal = this.closeModal.bind(this);
   }
@@ -13,8 +14,9 @@ class Details extends React.Component {
   componentDidMount() {
     fetch(`/api/sessions/${this.props.postId}`)
       .then(res => res.json())
-      .then(post => this.setState({ post }))
+      .then(post => this.setState({ post: post, postId: this.props.postId }))
       .catch(err => console.error(err));
+
   }
 
   closeModal(event) {
@@ -28,7 +30,7 @@ class Details extends React.Component {
     return (
 
       <div className='container'>
-        {this.state.modal && <ShowModal close={this.closeModal}/>}
+        {this.state.modal && <ShowModal close={this.closeModal} post={this.state.post} postId={this.state.postId}/>}
           <div className='row mt-3rem'>
             <div className='col-half'>
               <div className='img-upload'>

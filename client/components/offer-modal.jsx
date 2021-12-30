@@ -9,7 +9,6 @@ class ShowModal extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleClick = this.handleClick.bind(this);
-
   }
 
   handleClick(event) {
@@ -21,10 +20,12 @@ class ShowModal extends React.Component {
   }
 
   handleSubmit(event) {
+    const userId = this.props.post.userId;
     event.preventDefault();
     const offerObj = {};
     offerObj.offerAmount = this.state.offerAmount;
-    fetch('/api/sessions/2',
+    offerObj.postId = this.props.postId;
+    fetch(`/api/sessions/${userId}`,
       {
         method: 'POST',
         headers: {
