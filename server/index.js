@@ -39,7 +39,7 @@ app.post('/api/sessions/', uploadsMiddleware, (req, res, next) => {
 });
 
 app.get('/api/sessions', (req, res, next) => {
-  const sql = 'select * from "posts" order by "postId"';
+  const sql = 'select * from "posts" order by "postId" desc';
   db.query(sql)
     .then(response => {
       res.status(200).json(response.rows);
@@ -117,6 +117,20 @@ app.post('/api/auth/sign-in', (req, res, next) => {
           res.status(201).json(payload);
         })
         .catch(err => next(err));
+    })
+    .catch(err => next(err));
+});
+
+app.get('/api/messages', (req, res, next) => {
+  const sql = `select "imgUrl", "message", "username" from "posts" as "p"
+               join "messages" as "m"
+               on "p"."userId" = "m"."recipientId"
+               join "users" as "u"
+               on "m"."recipientId" = "u"."userId"
+               where "m"."recipientId" = "p"."userId"`;
+  db.query(sql)
+    .then(result => {
+      res.status(200).json(result.rows);
     })
     .catch(err => next(err));
 });
