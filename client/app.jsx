@@ -5,7 +5,7 @@ import FormPage from './pages/create-form';
 import AppDrawer from './components/drawer';
 import Icons from './components/icons';
 import Details from './pages/post-details';
-
+import SignIn from './pages/sign-in';
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -36,7 +36,9 @@ export default class App extends React.Component {
       const postId = route.params.get('postId');
       return <Details postId={postId}/>;
     }
-
+    if (route.path === 'sign-in') {
+      return <SignIn />;
+    }
   }
 
   render() {
