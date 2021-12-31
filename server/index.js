@@ -3,6 +3,7 @@ const pg = require('pg');
 const express = require('express');
 const errorMiddleware = require('./error-middleware');
 const staticMiddleware = require('./static-middleware');
+const authorizationMiddleware = require('./authorization-middleware');
 const uploadsMiddleware = require('./uploads-middleware');
 const ClientError = require('./client-error');
 const argon2 = require('argon2');
@@ -121,8 +122,8 @@ app.post('/api/auth/sign-in', (req, res, next) => {
     .catch(err => next(err));
 });
 
-app.get('/api/messages/:recipientId', (req, res, next) => {
-  const { recipientId } = req.params;
+app.get('/api/messages', authorizationMiddleware, (req, res, next) => {
+  const userId = req.user.user.userId;
   // using a common table expression
   const sql = `with "receivedOffers" as (
     --get the columns
@@ -155,7 +156,7 @@ app.get('/api/messages/:recipientId', (req, res, next) => {
     --get the most recent message from each group of messages
   where "row number" = 1`;
 
-  const params = [recipientId];
+  const params = [userId];
   db.query(sql, params)
     .then(result => {
       res.status(200).json(result.rows);

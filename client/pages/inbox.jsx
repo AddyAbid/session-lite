@@ -9,8 +9,12 @@ class Inbox extends React.Component {
   }
 
   componentDidMount() {
-    const userId = window.localStorage.getItem('userId');
-    fetch(`/api/messages/${userId}`)
+    const token = window.localStorage.getItem('user-jwt');
+    fetch('/api/messages', {
+      headers: {
+        'X-Access-Token': token
+      }
+    })
       .then(response => response.json())
       .then(message => {
         this.setState({ message });
