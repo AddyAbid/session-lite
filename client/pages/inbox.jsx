@@ -1,5 +1,4 @@
 import React from 'react';
-
 class Inbox extends React.Component {
   constructor(props) {
     super(props);
@@ -38,15 +37,17 @@ class Inbox extends React.Component {
           {this.state.message.map(
             (eachMessage, index) => {
               return (
-                <div className='modal-row border-bottom hover-highlight' key={index}>
-                  <div className='column-40 margin-auto'>
-                    <h2 className='roboto-4 font-size-1-2 mt-20px'>{eachMessage.username}</h2>
-                    <p className='roboto-3 mb-20px'>{eachMessage.message}</p>
-                  </div>
+                <a className='inbox-anchor' href={`#thread?postId=${eachMessage.postId}&userId=${eachMessage.userId}`} key={index}>
+                  <div className='modal-row border-bottom hover-highlight' >
+                    <div className='column-40 margin-auto'>
+                      <h2 className='roboto-4 font-size-1-2 mt-20px'>{eachMessage.username}</h2>
+                      <p className='roboto-3 mb-20px'>{eachMessage.message}</p>
+                    </div>
                   <div className='column-40 text-align-center img-flex'>
                     <img className='inbox-img' src={eachMessage.imgUrl}/>
                 </div>
               </div>
+             </a>
               );
             }
           )}

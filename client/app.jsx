@@ -8,6 +8,7 @@ import Details from './pages/post-details';
 import SignIn from './pages/sign-in';
 import decodeToken from './lib/decode-token';
 import Inbox from './pages/inbox';
+import OfferThread from './pages/offer-thread';
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -56,6 +57,11 @@ export default class App extends React.Component {
     }
     if (route.path === 'inbox') {
       return <Inbox />;
+    }
+    if (route.path === 'thread') {
+      const postId = route.params.get('postId');
+      const senderId = route.params.get('userId');
+      return <OfferThread postId={postId} senderId={senderId}/>;
     }
   }
 

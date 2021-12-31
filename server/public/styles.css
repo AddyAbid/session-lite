@@ -302,6 +302,18 @@ body {
   margin-bottom: 20px;
 }
 
+a.inbox-anchor:link {
+  text-decoration: inherit;
+  color: inherit;
+  cursor: auto;
+}
+
+a.inbox-anchor:visited {
+  text-decoration: inherit;
+  color: inherit;
+  cursor: auto;
+}
+
 i {
   cursor: pointer;
   margin: 1rem;
