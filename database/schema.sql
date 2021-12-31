@@ -38,7 +38,8 @@ CREATE TABLE "public"."messages" (
 	"message" TEXT NOT NULL,
 	"senderId" int NOT NULL,
 	"postId" int NOT NULL,
-  "recipientId" int NOT NULL
+  "recipientId" int NOT NULL,
+  "createdAt" timestamptz(6) not null default now()
 ) WITH (
   OIDS=FALSE
 );

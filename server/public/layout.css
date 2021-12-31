@@ -23,6 +23,10 @@
   width: 100%;
 }
 
+.margin-auto {
+  margin: 0 auto;
+}
+
 .column-form {
   margin-left: auto;
   margin-right: auto;
@@ -68,6 +72,10 @@
   width: 70%;
 }
 
+.column-80 {
+  width: 80%;
+}
+
 .relative {
   position: relative;
 }
@@ -89,6 +97,10 @@
   bottom: 5px;
   left: 50%;
   transform: translateX(-50%);
+}
+
+.column-40 {
+  width: 40%;
 }
 
 .pd-7 {
@@ -130,6 +142,12 @@
 
 .hidden {
   display: none;
+}
+
+.img-flex {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 @media only screen and (min-width: 680px) {
@@ -221,5 +239,9 @@
 
   .mt-1rem-header {
     margin-top: 1rem;
+  }
+
+  .mobile-text-center {
+    text-align: center;
   }
 }

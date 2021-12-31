@@ -3,6 +3,7 @@ const pg = require('pg');
 const express = require('express');
 const errorMiddleware = require('./error-middleware');
 const staticMiddleware = require('./static-middleware');
+const authorizationMiddleware = require('./authorization-middleware');
 const uploadsMiddleware = require('./uploads-middleware');
 const ClientError = require('./client-error');
 const argon2 = require('argon2');
@@ -39,7 +40,7 @@ app.post('/api/sessions/', uploadsMiddleware, (req, res, next) => {
 });
 
 app.get('/api/sessions', (req, res, next) => {
-  const sql = 'select * from "posts" order by "postId"';
+  const sql = 'select * from "posts" order by "postId" desc';
   db.query(sql)
     .then(response => {
       res.status(200).json(response.rows);
@@ -69,7 +70,7 @@ app.get('/api/sessions/:postId', (req, res, next) => {
     .catch(err => next(err));
 });
 app.post('/api/sessions/:recipientId', (req, res, next) => {
-  const message = req.body.offerAmount;
+  const message = `Hi, I would like to book this session for $${req.body.offerAmount}!`;
   const postId = req.body.postId;
   const { recipientId } = req.params;
   if (!message) {
@@ -117,6 +118,48 @@ app.post('/api/auth/sign-in', (req, res, next) => {
           res.status(201).json(payload);
         })
         .catch(err => next(err));
+    })
+    .catch(err => next(err));
+});
+
+app.get('/api/messages', authorizationMiddleware, (req, res, next) => {
+  const userId = req.user.user.userId;
+  // using a common table expression
+  const sql = `with "receivedOffers" as (
+    --get the columns
+  select "u"."userId",
+         "u"."username",
+         "p"."postId",
+         "p"."title",
+         "p"."imgUrl",
+         "m"."message",
+    --assigning a row number to every row in the groups
+         row_number() over (
+    --grouping messages by who its from and what its about
+           partition by ("m"."senderId", "m"."postId")
+    --sorting by most recent messages
+               order by "m"."createdAt" desc
+         ) as "row number"
+    from "messages" as "m"
+    join "posts" as "p" using ("postId")
+    join "users" as "u"
+      on "m"."senderId" = "u"."userId"
+   where "m"."recipientId" = $1
+  )
+  select "userId",
+        "username",
+        "postId",
+        "title",
+        "imgUrl",
+        "message"
+    from "receivedOffers"
+    --get the most recent message from each group of messages
+  where "row number" = 1`;
+
+  const params = [userId];
+  db.query(sql, params)
+    .then(result => {
+      res.status(200).json(result.rows);
     })
     .catch(err => next(err));
 });
