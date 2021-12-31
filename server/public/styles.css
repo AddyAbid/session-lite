@@ -255,6 +255,53 @@ body {
   margin-top: 8rem;
 }
 
+.roboto-7 {
+  font-family: Roboto, sans-serif;
+  font-weight: 700;
+}
+
+.margin-bottom-0 {
+  margin-bottom: 0;
+}
+
+.border-bottom {
+  border-bottom: 1px solid rgb(190, 190, 190);
+}
+
+.border-bottom-2px {
+  border-bottom: 2px solid rgb(190, 190, 190);
+}
+
+.roboto-3 {
+  font-family: Roboto, sans-serif;
+  font-weight: 300;
+  font-size: 14px;
+}
+
+.inbox-img {
+  height: 85px;
+  width: 120px;
+  border-radius: 5px;
+  object-fit: fill;
+}
+
+.hover-highlight:hover {
+  cursor: pointer;
+  background-color: rgb(235, 235, 235);
+}
+
+.font-size-1-2 {
+  font-size: 1.2rem;
+}
+
+.mt-20px {
+  margin-top: 20px;
+}
+
+.mb-20px {
+  margin-bottom: 20px;
+}
+
 i {
   cursor: pointer;
   margin: 1rem;

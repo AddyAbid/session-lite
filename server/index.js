@@ -69,7 +69,7 @@ app.get('/api/sessions/:postId', (req, res, next) => {
     .catch(err => next(err));
 });
 app.post('/api/sessions/:recipientId', (req, res, next) => {
-  const message = req.body.offerAmount;
+  const message = `Hi, I would like to book this session for $${req.body.offerAmount}!ß`;
   const postId = req.body.postId;
   const { recipientId } = req.params;
   if (!message) {
@@ -121,14 +121,42 @@ app.post('/api/auth/sign-in', (req, res, next) => {
     .catch(err => next(err));
 });
 
-app.get('/api/messages', (req, res, next) => {
-  const sql = `select "imgUrl", "message", "username" from "posts" as "p"
-               join "messages" as "m"
-               on "p"."userId" = "m"."recipientId"
-               join "users" as "u"
-               on "m"."recipientId" = "u"."userId"
-               where "m"."recipientId" = "p"."userId"`;
-  db.query(sql)
+app.get('/api/messages/:recipientId', (req, res, next) => {
+  const { recipientId } = req.params;
+  // using a common table expression
+  const sql = `with "receivedOffers" as (
+    --get the columns
+  select "u"."userId",
+         "u"."username",
+         "p"."postId",
+         "p"."title",
+         "p"."imgUrl",
+         "m"."message",
+    --assigning a row number to every row in the groups
+         row_number() over (
+    --grouping messages by who its from and what its about
+           partition by ("m"."senderId", "m"."postId")
+    --sorting by most recent messages
+               order by "m"."createdAt" desc
+         ) as "row number"
+    from "messages" as "m"
+    join "posts" as "p" using ("postId")
+    join "users" as "u"
+      on "m"."senderId" = "u"."userId"
+   where "m"."recipientId" = $1
+  )
+  select "userId",
+        "username",
+        "postId",
+        "title",
+        "imgUrl",
+        "message"
+    from "receivedOffers"
+    --get the most recent message from each group of messages
+  where "row number" = 1`;
+
+  const params = [recipientId];
+  db.query(sql, params)
     .then(result => {
       res.status(200).json(result.rows);
     })

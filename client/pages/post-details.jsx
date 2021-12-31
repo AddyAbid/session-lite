@@ -1,5 +1,6 @@
 import React from 'react';
 import ShowModal from '../components/offer-modal';
+
 class Details extends React.Component {
   constructor(props) {
     super(props);
@@ -27,8 +28,8 @@ class Details extends React.Component {
 
     if (!this.state.post) return null;
     const { title, description, price, imgUrl } = this.state.post;
-    return (
 
+    return (
       <div className='container'>
         {this.state.modal && <ShowModal close={this.closeModal} post={this.state.post} postId={this.state.postId}/>}
           <div className='row mt-3rem'>
@@ -78,7 +79,6 @@ class Details extends React.Component {
             </div>
           </div>
         </div>
-
     );
   }
 }
