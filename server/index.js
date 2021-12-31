@@ -69,7 +69,7 @@ app.get('/api/sessions/:postId', (req, res, next) => {
     .catch(err => next(err));
 });
 app.post('/api/sessions/:recipientId', (req, res, next) => {
-  const message = `Hi, I would like to book this session for $${req.body.offerAmount}!ß`;
+  const message = `Hi, I would like to book this session for $${req.body.offerAmount}!`;
   const postId = req.body.postId;
   const { recipientId } = req.params;
   if (!message) {
