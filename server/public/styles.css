@@ -66,6 +66,18 @@ body {
   background-color: #dd8f34;
 }
 
+.raleway-500-white {
+  font-family: Raleway, sans-serif;
+  font-weight: 500;
+  font-size: 17px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: 1px solid;
+  cursor: pointer;
+  color: #dd8f34;
+  background-color: white;
+}
+
 .resize-none {
   resize: none;
 }
@@ -300,6 +312,117 @@ body {
 
 .mb-20px {
   margin-bottom: 20px;
+}
+
+a.inbox-anchor:link {
+  text-decoration: inherit;
+  color: inherit;
+  cursor: auto;
+}
+
+a.inbox-anchor:visited {
+  text-decoration: inherit;
+  color: inherit;
+  cursor: auto;
+}
+
+.height-align-bottom {
+  align-items: flex-end;
+}
+
+.chat {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+
+.messages {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+}
+
+.message {
+  padding: 8px 15px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  display: inline-block;
+}
+
+.in {
+  border-top-right-radius: 20px;
+  border-top-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+.out {
+  border-top-right-radius: 20px;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+}
+
+.yours {
+  align-items: flex-start;
+}
+
+.yours .message {
+  margin-right: 25%;
+  background-color: lightgray;
+}
+
+.mine {
+  align-items: flex-end;
+}
+
+.mine .message {
+  color: white;
+  margin-left: 25%;
+  background: #dd8f34;
+}
+
+.object-fit-inbox {
+  height: 250px;
+  width: 75%;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.border-top-2px {
+  border-top: 2px solid #cecece;
+  width: 80%;
+}
+
+.text-align-left {
+  text-align: left;
+}
+
+.send-message-button {
+  background-color: #dd8f34;
+  color: white;
+  padding: 5px 15px;
+  border: 0;
+  border-radius: 3px;
+  font-family: Roboto, sans-serif;
+  font-size: 1rem;
+}
+
+.text-align-end {
+  text-align: end;
+}
+
+.mt {
+  margin-top: 1rem;
+}
+
+.ml-2 {
+  margin-left: 2rem;
+}
+
+.message-input {
+  padding: 5px;
+  width: 65%;
+  border-radius: 10px;
+  border: 1px solid #cecece;
 }
 
 i {

@@ -43,6 +43,10 @@
   display: flex;
 }
 
+.mt-3 {
+  margin-top: 3.5rem;
+}
+
 .pt-8 {
   padding-top: 8px;
 }
@@ -193,6 +197,19 @@
   .border-bottom-desktop {
     border-bottom: 1px solid rgb(190, 190, 190);
   }
+
+  .ml-desktop {
+    margin-left: 1rem;
+  }
+
+  .mt-desktop-2rem {
+    margin-top: 2rem;
+  }
+
+  .border-top-2px-desktop-mobile {
+    border-top: 2px solid #cecece;
+    width: 80%;
+  }
 }
 
 @media only screen and (max-width: 680px) {
@@ -243,5 +260,14 @@
 
   .mobile-text-center {
     text-align: center;
+  }
+
+  .pdl-mobile {
+    padding-left: 1rem;
+  }
+
+  .border-top-2px-desktop-mobile {
+    border-top: 2px solid #cecece;
+    width: 100%;
   }
 }

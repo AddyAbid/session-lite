@@ -163,6 +163,34 @@ app.get('/api/messages', authorizationMiddleware, (req, res, next) => {
     })
     .catch(err => next(err));
 });
+
+app.get('/api/messages/:postId/:senderId', authorizationMiddleware, (req, res, next) => {
+  const { postId, senderId } = req.params;
+  const recipientId = req.user.user.userId;
+  const sql = `select "u"."userId",
+              "u"."username",
+              "p"."postId",
+              "p"."title",
+              "p"."price",
+              "p"."imgUrl",
+              "m"."message"
+          from "messages" as "m"
+          join "posts" as "p" using ("postId")
+          join "users" as "u"
+            on "m"."senderId" = "u"."userId"
+        where "postId" = $3
+        and (
+          ("recipientId" = $1 and "senderId" = $2) or
+          ("recipientId" = $2 and "senderId" = $1)
+          )
+          order by "m"."createdAt" desc`;
+  const params = [recipientId, senderId, postId];
+  db.query(sql, params)
+    .then(response => {
+      res.status(200).json(response.rows);
+    })
+    .catch(err => next(err));
+});
 app.use(errorMiddleware);
 
 app.listen(process.env.PORT, () => {

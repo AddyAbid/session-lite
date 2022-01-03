@@ -28,7 +28,6 @@ class Details extends React.Component {
 
     if (!this.state.post) return null;
     const { title, description, price, imgUrl } = this.state.post;
-
     return (
       <div className='container'>
         {this.state.modal && <ShowModal close={this.closeModal} post={this.state.post} postId={this.state.postId}/>}
