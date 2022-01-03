@@ -191,6 +191,21 @@ app.get('/api/messages/:postId/:senderId', authorizationMiddleware, (req, res, n
     })
     .catch(err => next(err));
 });
+
+app.post('/api/messages/:postId/:senderId', (req, res, next) => {
+  const { reply } = req.body;
+  const { postId, senderId } = req.params;
+  const sql = `insert into "messages"
+               ("message", "recipientId", "postId", "senderId")
+               values ($1, $2, $3, $4)
+               returning *
+               `;
+  const params = [reply, 1, postId, senderId];
+  db.query(sql, params)
+    .then(response => {
+      res.status(201).json(response.rows[0]);
+    });
+});
 app.use(errorMiddleware);
 
 app.listen(process.env.PORT, () => {
