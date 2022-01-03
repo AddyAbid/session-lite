@@ -188,7 +188,8 @@ app.get('/api/messages/:postId/:senderId', authorizationMiddleware, (req, res, n
   db.query(sql, params)
     .then(response => {
       res.status(200).json(response.rows);
-    });
+    })
+    .catch(err => next(err));
 });
 app.use(errorMiddleware);
 
