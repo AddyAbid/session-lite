@@ -205,6 +205,11 @@
   .mt-desktop-2rem {
     margin-top: 2rem;
   }
+
+  .border-top-2px-desktop-mobile {
+    border-top: 2px solid #cecece;
+    width: 80%;
+  }
 }
 
 @media only screen and (max-width: 680px) {
@@ -259,5 +264,10 @@
 
   .pdl-mobile {
     padding-left: 1rem;
+  }
+
+  .border-top-2px-desktop-mobile {
+    border-top: 2px solid #cecece;
+    width: 100%;
   }
 }

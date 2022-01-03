@@ -55,9 +55,9 @@ class OfferThread extends React.Component {
               </div>
 
             </div>
-            <div className='modal-row border-top-2px'>
+            <div className='modal-row border-top-2px-desktop-mobile'>
               <div className='column-100'>
-                <div className='text-align-end mt'>
+                <div className='text-align-center mt'>
                   <input className='message-input roboto-3 '></input>
                 <button className='send-message-button ml-2'>Send</button>
                 </div>
