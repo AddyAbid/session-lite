@@ -173,6 +173,7 @@ app.get('/api/messages/:postId/:senderId', authorizationMiddleware, (req, res, n
          "u"."username",
          "p"."postId",
          "p"."title",
+         "p"."price",
          "p"."imgUrl",
          "m"."message",
     --assigning a row number to every row in the groups
@@ -196,6 +197,7 @@ app.get('/api/messages/:postId/:senderId', authorizationMiddleware, (req, res, n
         "postId",
         "title",
         "imgUrl",
+        "price",
         "message"
     from "receivedOffers"
     --get the most recent message from each group of messages
