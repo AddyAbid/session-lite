@@ -167,41 +167,23 @@ app.get('/api/messages', authorizationMiddleware, (req, res, next) => {
 app.get('/api/messages/:postId/:senderId', authorizationMiddleware, (req, res, next) => {
   const { postId, senderId } = req.params;
   const recipientId = req.user.user.userId;
-  const sql = `with "receivedOffers" as (
-    --get the columns
-  select "u"."userId",
-         "u"."username",
-         "p"."postId",
-         "p"."title",
-         "p"."price",
-         "p"."imgUrl",
-         "m"."message",
-    --assigning a row number to every row in the groups
-         row_number() over (
-    --grouping messages by who its from and what its about
-           partition by ("m"."senderId", "m"."postId")
-    --sorting by most recent messages
-               order by "m"."createdAt" desc
-         ) as "row number"
-    from "messages" as "m"
-    join "posts" as "p" using ("postId")
-    join "users" as "u"
-      on "m"."senderId" = "u"."userId"
-  where "postId" = $3
-  and (
-    ("recipientId" = $1 and "senderId" = $2)
-  )
-  )
-  select "userId",
-        "username",
-        "postId",
-        "title",
-        "imgUrl",
-        "price",
-        "message"
-    from "receivedOffers"
-    --get the most recent message from each group of messages
-  where "row number" = 1`;
+  const sql = `select "u"."userId",
+              "u"."username",
+              "p"."postId",
+              "p"."title",
+              "p"."price",
+              "p"."imgUrl",
+              "m"."message"
+          from "messages" as "m"
+          join "posts" as "p" using ("postId")
+          join "users" as "u"
+            on "m"."senderId" = "u"."userId"
+        where "postId" = $3
+        and (
+          ("recipientId" = $1 and "senderId" = $2) or
+          ("recipientId" = $2 and "senderId" = $1)
+          )
+          order by "m"."createdAt" desc`;
   const params = [recipientId, senderId, postId];
   db.query(sql, params)
     .then(response => {
