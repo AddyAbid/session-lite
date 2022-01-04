@@ -11,22 +11,20 @@ const jwt = require('jsonwebtoken');
 const app = express();
 const http = require('http');
 const server = http.createServer(app);
-// const io = require('socket.io')(server);
+const io = require('socket.io')(server);
 
-// io.on('connection', socket => {
-//   const token = socket.handshake.query.userToken;
-//   jwt
-//     .verify(token, 'changeMe', (err, verifiedToken) => {
-//       if (err) {
-//         verifiedToken = null;
-//       } else {
-//         console.log('verified', verifiedToken);
-//       }
-//     });
-
-//   // eslint-disable-next-line no-console
-
-// });
+io.on('connection', socket => {
+  const token = socket.handshake.query.userToken;
+  jwt
+    .verify(token, 'changeMe', (err, verifiedToken) => {
+      if (err) {
+        verifiedToken = null;
+      } else {
+        // eslint-disable-next-line no-console
+        console.log('verified', verifiedToken);
+      }
+    });
+});
 
 const db = new pg.Pool({
   connectionString: process.env.DATABASE_URL,
@@ -201,12 +199,28 @@ app.get('/api/messages/:postId/:senderId', authorizationMiddleware, (req, res, n
           ("recipientId" = $1 and "senderId" = $2) or
           ("recipientId" = $2 and "senderId" = $1)
           )
-          order by "m"."createdAt" desc`;
+          order by "m"."createdAt" `;
   const params = [recipientId, senderId, postId];
   db.query(sql, params)
     .then(response => {
+      const secondParams = [senderId];
+      const secondSql = `select "userId",
+                                "username"
+                        from    "users"
+                        where   "userId" = $1`;
+      db.query(secondSql, secondParams)
+        .then(user => {
+          res.status(200).json({
+            user: user.rows[0],
+            postId: response.rows[0].postId,
+            title: response.rows[0].title,
+            price: response.rows[0].price,
+            imgUrl: response.rows[0].imgUrl,
+            message: response.rows
+          });
 
-      res.status(200).json(response.rows);
+        })
+        .catch(err => next(err));
     })
     .catch(err => next(err));
 });
