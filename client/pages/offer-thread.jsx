@@ -1,11 +1,16 @@
+
 import React from 'react';
+import io from 'socket.io-client';
 
 class OfferThread extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      message: null
+      messageIn: null,
+      reply: ''
     };
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleMessage = this.handleMessage.bind(this);
   }
 
   componentDidMount() {
@@ -17,13 +22,55 @@ class OfferThread extends React.Component {
     })
       .then(response => response.json())
       .then(offerThread => {
-        this.setState({ message: offerThread[0] });
+        this.setState({ messageIn: offerThread[0] });
       });
+    const socket = io('/', {
+      transports: ['websocket'],
+      reconnectionDelayMax: 1000,
+      query: {
+        postId: this.props.postId,
+        userToken: window.localStorage.getItem('user-jwt'),
+        recipientId: window.localStorage.getItem('userId')
+      }
+    });
+    socket.on('connect', () => {
+      // console.log('client connected');
+    });
+  }
+
+  handleMessage(event) {
+    this.setState({ reply: event.target.value });
+  }
+
+  handleSubmit(event) {
+    const token = window.localStorage.getItem('user-jwt');
+    const replyObj = {
+      reply: this.state.reply,
+      recipient: this.props.senderId,
+      postId: this.props.postId
+    };
+
+    event.preventDefault();
+    fetch('/api/messages', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        'X-Access-Token': token
+      },
+      body: JSON.stringify(replyObj)
+    })
+      .then(response => response.json())
+      .then(reply => {
+
+      })
+      .catch(err => console.error(err));
+    this.setState({ reply: '' });
   }
 
   render() {
-    if (!this.state.message) return null;
-    const { message, imgUrl, title, username, price, postId } = this.state.message;
+    if (!this.state.messageIn) return null;
+    const { message, imgUrl, title, username, price, postId } = this.state.messageIn;
+    // console.log('this.state.messageIn:', this.state.messageIn);
     return (
       <div className='container'>
         <div className='modal-row'>
@@ -58,8 +105,19 @@ class OfferThread extends React.Component {
             <div className='modal-row border-top-2px-desktop-mobile'>
               <div className='column-100'>
                 <div className='text-align-center mt'>
-                  <input className='message-input roboto-3 '></input>
-                <button className='send-message-button ml-2'>Send</button>
+                  <form onSubmit={this.handleSubmit}>
+                    <input
+                    className='message-input roboto-3 '
+                    type='text'
+                    required
+                    autoFocus
+                    name='reply'
+                    id='reply'
+                    onChange={this.handleMessage}
+                    value={this.state.reply}
+                    />
+                    <button type='submit' className='send-message-button ml-2'>Send</button>
+                  </form>
                 </div>
               </div>
             </div>

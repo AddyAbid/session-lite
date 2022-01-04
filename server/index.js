@@ -8,14 +8,32 @@ const uploadsMiddleware = require('./uploads-middleware');
 const ClientError = require('./client-error');
 const argon2 = require('argon2');
 const jwt = require('jsonwebtoken');
+const app = express();
+const http = require('http');
+const server = http.createServer(app);
+// const io = require('socket.io')(server);
+
+// io.on('connection', socket => {
+//   const token = socket.handshake.query.userToken;
+//   jwt
+//     .verify(token, 'changeMe', (err, verifiedToken) => {
+//       if (err) {
+//         verifiedToken = null;
+//       } else {
+//         console.log('verified', verifiedToken);
+//       }
+//     });
+
+//   // eslint-disable-next-line no-console
+
+// });
+
 const db = new pg.Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: {
     rejectUnauthorized: false
   }
 });
-
-const app = express();
 
 app.use(staticMiddleware);
 
@@ -187,28 +205,31 @@ app.get('/api/messages/:postId/:senderId', authorizationMiddleware, (req, res, n
   const params = [recipientId, senderId, postId];
   db.query(sql, params)
     .then(response => {
+
       res.status(200).json(response.rows);
     })
     .catch(err => next(err));
 });
 
-app.post('/api/messages/:postId/:senderId', (req, res, next) => {
-  const { reply } = req.body;
-  const { postId, senderId } = req.params;
+app.post('/api/messages', authorizationMiddleware, (req, res, next) => {
+  const senderId = req.user.user.userId;
+  const { reply, postId, recipient } = req.body;
   const sql = `insert into "messages"
                ("message", "recipientId", "postId", "senderId")
                values ($1, $2, $3, $4)
                returning *
                `;
-  const params = [reply, 1, postId, senderId];
+  const params = [reply, recipient, postId, senderId];
   db.query(sql, params)
     .then(response => {
       res.status(201).json(response.rows[0]);
-    });
+    })
+    .catch(err => next(err));
 });
+
 app.use(errorMiddleware);
 
-app.listen(process.env.PORT, () => {
+server.listen(process.env.PORT, () => {
   // eslint-disable-next-line no-console
   console.log(`express server listening on port ${process.env.PORT}`);
 });
