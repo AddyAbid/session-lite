@@ -75,7 +75,6 @@ class OfferThread extends React.Component {
     const title = this.state.messageIn.title;
     const price = this.state.messageIn.price;
     const imgUrl = this.state.messageIn.imgUrl;
-
     return (
       <div className='container'>
 
@@ -88,11 +87,10 @@ class OfferThread extends React.Component {
                 <div className="chat" >
                   {this.state.messageIn.message.map(
                     (message, index) => {
-                      const sellerId = Number(window.localStorage.getItem('userId'));
                       return (
                         <div key={index}>
-                          <div className={message.userId === sellerId ? 'mine messages' : 'yours messages'}>
-                            <div className={message.userId === sellerId ? 'message out' : 'message in last'}>
+                          <div className={message.userId === this.props.userId ? 'mine messages' : 'yours messages'}>
+                            <div className={message.userId === this.props.userId ? 'message out' : 'message in last'}>
                               <p className='roboto-4'>{message.message}</p>
                               </div>
                             </div>
