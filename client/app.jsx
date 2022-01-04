@@ -59,9 +59,10 @@ export default class App extends React.Component {
       return <Inbox />;
     }
     if (route.path === 'thread') {
+      const userId = Number(window.localStorage.getItem('userId'));
       const postId = route.params.get('postId');
       const senderId = route.params.get('userId');
-      return <OfferThread postId={postId} senderId={senderId}/>;
+      return <OfferThread postId={postId} senderId={senderId} userId={userId}/>;
     }
   }
 

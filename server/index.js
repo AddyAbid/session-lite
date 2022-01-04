@@ -8,14 +8,30 @@ const uploadsMiddleware = require('./uploads-middleware');
 const ClientError = require('./client-error');
 const argon2 = require('argon2');
 const jwt = require('jsonwebtoken');
+const app = express();
+const http = require('http');
+const server = http.createServer(app);
+const io = require('socket.io')(server);
+
+io.on('connection', socket => {
+  const token = socket.handshake.query.userToken;
+  jwt
+    .verify(token, 'changeMe', (err, verifiedToken) => {
+      if (err) {
+        verifiedToken = null;
+      } else {
+        // eslint-disable-next-line no-console
+        console.log('verified', verifiedToken);
+      }
+    });
+});
+
 const db = new pg.Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: {
     rejectUnauthorized: false
   }
 });
-
-const app = express();
 
 app.use(staticMiddleware);
 
@@ -183,17 +199,51 @@ app.get('/api/messages/:postId/:senderId', authorizationMiddleware, (req, res, n
           ("recipientId" = $1 and "senderId" = $2) or
           ("recipientId" = $2 and "senderId" = $1)
           )
-          order by "m"."createdAt" desc`;
+          order by "m"."createdAt" `;
   const params = [recipientId, senderId, postId];
   db.query(sql, params)
     .then(response => {
-      res.status(200).json(response.rows);
+      const secondParams = [senderId];
+      const secondSql = `select "userId",
+                                "username"
+                        from    "users"
+                        where   "userId" = $1`;
+      db.query(secondSql, secondParams)
+        .then(user => {
+          res.status(200).json({
+            user: user.rows[0],
+            postId: response.rows[0].postId,
+            title: response.rows[0].title,
+            price: response.rows[0].price,
+            imgUrl: response.rows[0].imgUrl,
+            message: response.rows
+          });
+
+        })
+        .catch(err => next(err));
     })
     .catch(err => next(err));
 });
+
+app.post('/api/messages', authorizationMiddleware, (req, res, next) => {
+  const senderId = req.user.user.userId;
+  const { reply, postId, recipient } = req.body;
+  const sql = `insert into "messages"
+               ("message", "recipientId", "postId", "senderId")
+               values ($1, $2, $3, $4)
+               returning *
+               `;
+  const params = [reply, recipient, postId, senderId];
+  db.query(sql, params)
+    .then(response => {
+      res.status(201).json(response.rows[0]);
+    })
+    .catch(err => next(err));
+});
+
 app.use(errorMiddleware);
 
-app.listen(process.env.PORT, () => {
+server.listen(process.env.PORT, () => {
   // eslint-disable-next-line no-console
   console.log(`express server listening on port ${process.env.PORT}`);
 });
