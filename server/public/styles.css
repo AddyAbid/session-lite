@@ -334,7 +334,7 @@ a.inbox-anchor:visited {
   display: flex;
   flex-direction: column;
   padding: 10px;
-  height: 80vh;
+  height: 70vh;
   overflow-y: scroll;
 }
 

@@ -15,11 +15,14 @@ const io = require('socket.io')(server);
 
 io.on('connection', socket => {
   const token = socket.handshake.query.userToken;
+  const buyer = socket.handshake.query.senderId;
+  const postId = socket.handshake.query.postId;
   jwt
     .verify(token, 'changeMe', (err, verifiedToken) => {
       if (err) {
         verifiedToken = null;
       } else {
+        socket.join(`${postId}-${verifiedToken.user.userId}-${buyer}`);
         // eslint-disable-next-line no-console
         console.log('verified', verifiedToken);
       }
@@ -118,6 +121,7 @@ app.post('/api/auth/sign-in', (req, res, next) => {
       const hashedPassword = result.rows[0].password;
       const userId = result.rows[0].userId;
       argon2
+
         .verify(hashedPassword, password)
         .then(isMatching => {
           if (!isMatching) {
@@ -239,6 +243,7 @@ app.post('/api/messages', authorizationMiddleware, (req, res, next) => {
       res.status(201).json(response.rows[0]);
     })
     .catch(err => next(err));
+  io.to(`${postId}-${recipient}-${senderId}`).emit(reply);
 });
 
 app.use(errorMiddleware);

@@ -1,7 +1,7 @@
 
 import React from 'react';
 import io from 'socket.io-client';
-
+let buyerId = null;
 class OfferThread extends React.Component {
   constructor(props) {
     super(props);
@@ -23,14 +23,17 @@ class OfferThread extends React.Component {
       .then(response => response.json())
       .then(offerThread => {
         this.setState({ messageIn: offerThread });
+        buyerId = offerThread.user.userId;
       });
+
     const socket = io.connect('/', {
       transports: ['websocket'],
       reconnectionDelayMax: 1000,
       query: {
         postId: this.props.postId,
         userToken: window.localStorage.getItem('user-jwt'),
-        recipientId: window.localStorage.getItem('userId')
+        recipientId: window.localStorage.getItem('userId'),
+        senderId: buyerId
       }
     });
     socket.on('connect', () => {
