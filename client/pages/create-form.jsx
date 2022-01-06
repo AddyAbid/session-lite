@@ -36,6 +36,7 @@ class FormPage extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
+    const token = window.localStorage.getItem('user-jwt');
     const formData = new FormData();
     formData.append('title', this.state.title);
     formData.append('description', this.state.description);
@@ -45,7 +46,10 @@ class FormPage extends React.Component {
     fetch('/api/sessions',
       {
         method: 'POST',
-        body: formData
+        body: formData,
+        headers: {
+          'X-Access-Token': token
+        }
       })
       .then(response => response.json())
       .then(res => {

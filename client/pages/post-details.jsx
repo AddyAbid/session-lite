@@ -26,7 +26,7 @@ class Details extends React.Component {
 
   render() {
     if (!this.state.post) return null;
-    const { title, description, price, imgUrl } = this.state.post;
+    const { title, description, price, imgUrl, userId } = this.state.post;
     return (
       <div className='container'>
         {this.state.modal && <ShowModal close={this.closeModal} post={this.state.post} postId={this.state.postId}/>}
@@ -45,6 +45,7 @@ class Details extends React.Component {
                   <div className='border-top'></div>
                   <h3 className='raleway-800'>{title}</h3>
                   <h4 className='raleway-300'>${price}/hour</h4>
+                  <h5></h5>
                </div>
               </div>
               <div className='row-details'>
@@ -52,7 +53,7 @@ class Details extends React.Component {
                   <div className='border-top'></div>
 
                     <div className='submit-button text-align-center mt-1rem hide-mobile'>
-                  <a href={`#thread?postId=${this.state.postId}&userId=${2}`}><button className='mobile-width-100 raleway-500-white pd-btn-98 mb-2rem'>Message Artist</button></a>
+                     <a href={`#thread?postId=${this.state.postId}&userId=${userId}`}><button className='mobile-width-100 raleway-500-white pd-btn-98 mb-2rem'>Message Artist</button></a>
                      <button onClick={this.closeModal} className='mobile-width-100 raleway-500 pd-btn'>Send Offer</button>
                     </div>
 
@@ -72,7 +73,7 @@ class Details extends React.Component {
             <div className='col-full'>
 
                 <div className='submit-button text-align-center mt-1rem hide-desktop'>
-              <button className='mobile-width-100 raleway-500-white pd-btn-98 mb-2rem'>Message Artist</button>
+              <a href={`#thread?postId=${this.state.postId}&userId=${userId}`}> <button className='mobile-width-100 raleway-500-white pd-btn-98 mb-2rem'>Message Artist</button></a>
               <button onClick={this.closeModal} className='mobile-width-100 raleway-500 pd-btn'>Send Offer</button>
                 </div>
 
