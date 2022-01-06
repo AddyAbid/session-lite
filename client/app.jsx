@@ -42,7 +42,10 @@ export default class App extends React.Component {
 
   renderPage() {
     const { route } = this.state;
-    if (route.path === '' || route.path === 'marketplace') {
+    if (route.path === '') {
+      return <SignIn signIn={this.handleSignIn}/>;
+    }
+    if (route.path === 'marketplace') {
       return <MarketPlace />;
     }
     if (route.path === 'form') {
@@ -50,7 +53,8 @@ export default class App extends React.Component {
     }
     if (route.path === 'posts') {
       const postId = route.params.get('postId');
-      return <Details postId={postId}/>;
+
+      return <Details postId={postId} />;
     }
     if (route.path === 'sign-in') {
       return <SignIn signIn={this.handleSignIn}/>;

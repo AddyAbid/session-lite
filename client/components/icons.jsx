@@ -5,12 +5,12 @@ function Icons(props) {
       <div className='row hide-desktop absolute-bottom-icons margin-0 text-align-center'>
         <div className='column-fifth'>
           <a href='#marketplace'>
-          <i className={props.route.path === 'marketplace' ? 'fas fa-store-alt fa-2x orange' : 'fas fa-store-alt fa-2x '} id='1'></i>
+          <i className={props.route.path === 'marketplace' || props.route.path === 'posts' ? 'fas fa-store-alt fa-2x orange' : 'fas fa-store-alt fa-2x '} id='1'></i>
           </a>
         </div>
         <div className='column-fifth'>
           <a href='#inbox'>
-            <i className={props.route.path === 'inbox' ? 'far fa-comment fa-2x orange' : 'far fa-comment fa-2x'}></i>
+          <i className={props.route.path === 'inbox' || props.route.path === 'thread' ? 'far fa-comment fa-2x orange' : 'far fa-comment fa-2x'}></i>
           </a>
         </div>
         <div className='column-fifth'>

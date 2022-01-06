@@ -15,17 +15,29 @@ const io = require('socket.io')(server);
 
 io.on('connection', socket => {
   const token = socket.handshake.query.userToken;
+  const buyer = Number(socket.handshake.query.buyer);
+  const seller = Number(socket.handshake.query.seller);
+  const postId = socket.handshake.query.postId;
   jwt
     .verify(token, 'changeMe', (err, verifiedToken) => {
       if (err) {
         verifiedToken = null;
       } else {
-        // eslint-disable-next-line no-console
-        console.log('verified', verifiedToken);
+        let buyerId;
+        let sellerId;
+        const userId = verifiedToken.user.userId;
+        if (userId === seller) {
+          sellerId = seller;
+          buyerId = buyer;
+        } else {
+          sellerId = buyer;
+          buyerId = userId;
+        }
+        socket.join(`${postId}-${sellerId}-${buyerId}`);
       }
+
     });
 });
-
 const db = new pg.Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: {
@@ -39,14 +51,15 @@ const jsonMiddleware = express.json();
 
 app.use(jsonMiddleware);
 
-app.post('/api/sessions/', uploadsMiddleware, (req, res, next) => {
+app.post('/api/sessions/', authorizationMiddleware, uploadsMiddleware, (req, res, next) => {
   const { title, description, price } = req.body;
+  const userId = req.user.user.userId;
   if (!title || !description) {
     throw new ClientError(400, 'title and description are required fields');
   }
   const url = `/images/${req.file.filename}`;
   const sql = 'insert into "posts" ("title", "description", "price", "imgUrl", "userId") values ($1, $2, $3, $4, $5) returning *';
-  const params = [title, description, price, url, 1];
+  const params = [title, description, price, url, userId];
 
   db.query(sql, params)
     .then(response => {
@@ -85,17 +98,19 @@ app.get('/api/sessions/:postId', (req, res, next) => {
     })
     .catch(err => next(err));
 });
-app.post('/api/sessions/:recipientId', (req, res, next) => {
+app.post('/api/sessions/:recipientId', authorizationMiddleware, (req, res, next) => {
   const message = `Hi, I would like to book this session for $${req.body.offerAmount}!`;
   const postId = req.body.postId;
   const { recipientId } = req.params;
+  const userId = req.user.user.userId;
   if (!message) {
     throw new ClientError(400, 'message is required field');
   }
   const sql = 'insert into "messages" ("message", "recipientId", "postId", "senderId") values ($1, $2, $3, $4) returning * ';
-  const params = [message, recipientId, postId, 2];
+  const params = [message, recipientId, postId, userId];
   db.query(sql, params)
     .then(response => {
+
       const [message] = response.rows;
       res.status(200).json(message);
     })
@@ -118,6 +133,7 @@ app.post('/api/auth/sign-in', (req, res, next) => {
       const hashedPassword = result.rows[0].password;
       const userId = result.rows[0].userId;
       argon2
+
         .verify(hashedPassword, password)
         .then(isMatching => {
           if (!isMatching) {
@@ -185,11 +201,8 @@ app.get('/api/messages/:postId/:senderId', authorizationMiddleware, (req, res, n
   const recipientId = req.user.user.userId;
   const sql = `select "u"."userId",
               "u"."username",
-              "p"."postId",
-              "p"."title",
-              "p"."price",
-              "p"."imgUrl",
-              "m"."message"
+              "m"."message",
+              "m"."createdAt"
           from "messages" as "m"
           join "posts" as "p" using ("postId")
           join "users" as "u"
@@ -202,23 +215,32 @@ app.get('/api/messages/:postId/:senderId', authorizationMiddleware, (req, res, n
           order by "m"."createdAt" `;
   const params = [recipientId, senderId, postId];
   db.query(sql, params)
-    .then(response => {
+    .then(messageResult => {
+
       const secondParams = [senderId];
       const secondSql = `select "userId",
                                 "username"
                         from    "users"
                         where   "userId" = $1`;
       db.query(secondSql, secondParams)
-        .then(user => {
-          res.status(200).json({
-            user: user.rows[0],
-            postId: response.rows[0].postId,
-            title: response.rows[0].title,
-            price: response.rows[0].price,
-            imgUrl: response.rows[0].imgUrl,
-            message: response.rows
-          });
-
+        .then(userResult => {
+          const thirdParams = [postId];
+          const thirdSql = `select "postId",
+                                "title",
+                                "imgUrl",
+                                "price",
+                                "userId"
+                        from    "posts"
+                        where   "postId" = $1`;
+          db.query(thirdSql, thirdParams)
+            .then(postResult => {
+              res.status(200).json({
+                user: userResult.rows[0],
+                messages: messageResult.rows,
+                post: postResult.rows[0]
+              });
+            })
+            .catch(err => next(err));
         })
         .catch(err => next(err));
     })
@@ -235,8 +257,26 @@ app.post('/api/messages', authorizationMiddleware, (req, res, next) => {
                `;
   const params = [reply, recipient, postId, senderId];
   db.query(sql, params)
-    .then(response => {
-      res.status(201).json(response.rows[0]);
+    .then(result => {
+      const secondSql = 'select "userId" from "posts" where "postId" = $1';
+      const secondParams = [postId];
+      db.query(secondSql, secondParams)
+        .then(postCreatorId => {
+          const postCreator = postCreatorId.rows[0].userId;
+          res.status(201).json(result.rows[0]);
+          result.rows[0].userId = senderId;
+          let buyer;
+          let seller;
+          if (postCreator === Number(recipient)) {
+            buyer = recipient;
+            seller = senderId;
+          } else {
+            seller = recipient;
+            buyer = senderId;
+          }
+          io.to(`${postId}-${buyer}-${seller}`).emit('message', result.rows[0]);
+        })
+        .catch(err => next(err));
     })
     .catch(err => next(err));
 });

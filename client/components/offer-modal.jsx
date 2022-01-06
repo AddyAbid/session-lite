@@ -25,15 +25,18 @@ class ShowModal extends React.Component {
     const offerObj = {};
     offerObj.offerAmount = this.state.offerAmount;
     offerObj.postId = this.props.postId;
+    const token = window.localStorage.getItem('user-jwt');
     fetch(`/api/sessions/${userId}`,
       {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'X-Access-Token': token
         },
         body: JSON.stringify(offerObj)
       })
       .then(response => response.json())
+
       .then(res => {
         this.props.close();
       })

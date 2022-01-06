@@ -33,7 +33,7 @@ class AppDrawer extends React.Component {
           <div className="column-25">
             <h1 className='raleway-500-menu'>Menu</h1>
             <a href='#marketplace' className="block mb raleway-size" onClick={this.handleClickDrawer}>Marketplace</a>
-            <a href='#form' className="block mb raleway-size" onClick={this.handleClickDrawer}>Post a Ssession</a>
+            <a href='#form' className="block mb raleway-size" onClick={this.handleClickDrawer}>Post a Session</a>
             <a href='#inbox' className="block mb raleway-size" onClick={this.handleClickDrawer}>Inbox</a>
           </div>
           <div className="column-75 overlay" onClick={this.handleClickDrawer}>
