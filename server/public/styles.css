@@ -343,8 +343,15 @@ a.inbox-anchor:visited {
   display: flex;
   flex-direction: column;
   padding: 10px;
-  height: 70vh;
   overflow-y: scroll;
+  scroll-behavior: smooth;
+  flex-grow: 1;
+}
+
+.chat-box {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  display: block;
 }
 
 .messages {
