@@ -2,44 +2,64 @@
 import React from 'react';
 import io from 'socket.io-client';
 let buyerId = null;
+let sellerId = null;
+
 class OfferThread extends React.Component {
+
   constructor(props) {
     super(props);
     this.state = {
       messageIn: null,
-      reply: ''
+      user: null,
+      post: null,
+      reply: '',
+      socketThread: null
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleMessage = this.handleMessage.bind(this);
   }
 
   componentDidMount() {
+
     const token = window.localStorage.getItem('user-jwt');
     fetch(`/api/messages/${this.props.postId}/${this.props.senderId}`, {
       headers: {
         'X-Access-Token': token
       }
-    })
+    }
+
+    )
       .then(response => response.json())
       .then(offerThread => {
-        this.setState({ messageIn: offerThread });
+        this.setState({
+          messageIn: offerThread.messages,
+          user: offerThread.user,
+          post: offerThread.post
+        });
         buyerId = offerThread.user.userId;
+        sellerId = offerThread.post.userId;
+        const socket = io.connect('/', {
+          transports: ['websocket'],
+          reconnectionDelayMax: 1000,
+          query: {
+            postId: this.props.postId,
+            userToken: window.localStorage.getItem('user-jwt'),
+            seller: sellerId,
+            buyer: buyerId
+          }
+        });
+        socket.on('connect', () => {
+          // eslint-disable-next-line no-console
+          console.log('client connected');
+        });
+
+        socket.on('message', arg => {
+          const copyObj = [...this.state.messageIn];
+          const newMessageArray = copyObj.concat(arg);
+          this.setState({ messageIn: newMessageArray });
+        });
       });
 
-    const socket = io.connect('/', {
-      transports: ['websocket'],
-      reconnectionDelayMax: 1000,
-      query: {
-        postId: this.props.postId,
-        userToken: window.localStorage.getItem('user-jwt'),
-        recipientId: window.localStorage.getItem('userId'),
-        senderId: buyerId
-      }
-    });
-    socket.on('connect', () => {
-      // eslint-disable-next-line no-console
-      console.log('client connected');
-    });
   }
 
   handleMessage(event) {
@@ -65,7 +85,6 @@ class OfferThread extends React.Component {
     })
       .then(response => response.json())
       .then(reply => {
-
       })
       .catch(err => console.error(err));
     this.setState({ reply: '' });
@@ -73,11 +92,8 @@ class OfferThread extends React.Component {
 
   render() {
     if (!this.state.messageIn) return null;
-    const { username } = this.state.messageIn.user;
-    const postId = this.state.messageIn.postId;
-    const title = this.state.messageIn.title;
-    const price = this.state.messageIn.price;
-    const imgUrl = this.state.messageIn.imgUrl;
+    const username = this.state.user.username;
+    const { postId, title, price, imgUrl } = this.state.post;
     return (
       <div className='container'>
 
@@ -88,7 +104,7 @@ class OfferThread extends React.Component {
                     <div className='modal-row height-align-bottom'>
                       <div className='column-100'>
                 <div className="chat" >
-                  {this.state.messageIn.message.map(
+                  {this.state.messageIn.map(
                     (message, index) => {
                       return (
                         <div key={index}>

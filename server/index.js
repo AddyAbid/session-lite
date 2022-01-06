@@ -15,137 +15,146 @@ const io = require('socket.io')(server);
 
 io.on('connection', socket => {
   const token = socket.handshake.query.userToken;
-  const buyer = socket.handshake.query.senderId;
+  const buyer = Number(socket.handshake.query.buyer);
+  const seller = Number(socket.handshake.query.seller);
   const postId = socket.handshake.query.postId;
   jwt
     .verify(token, 'changeMe', (err, verifiedToken) => {
       if (err) {
         verifiedToken = null;
       } else {
-        socket.join(`${postId}-${verifiedToken.user.userId}-${buyer}`);
-        // eslint-disable-next-line no-console
-        console.log('verified', verifiedToken);
+        let buyerId;
+        let sellerId;
+        const userId = verifiedToken.user.userId;
+        if (userId === seller) {
+          sellerId = seller;
+          buyerId = buyer;
+        } else {
+          sellerId = buyer;
+          buyerId = userId;
+        }
+        socket.join(`${postId}-${sellerId}-${buyerId}`);
       }
+
     });
-});
 
-const db = new pg.Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false
-  }
-});
+  const db = new pg.Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: {
+      rejectUnauthorized: false
+    }
+  });
 
-app.use(staticMiddleware);
+  app.use(staticMiddleware);
 
-const jsonMiddleware = express.json();
+  const jsonMiddleware = express.json();
 
-app.use(jsonMiddleware);
+  app.use(jsonMiddleware);
 
-app.post('/api/sessions/', uploadsMiddleware, (req, res, next) => {
-  const { title, description, price } = req.body;
-  if (!title || !description) {
-    throw new ClientError(400, 'title and description are required fields');
-  }
-  const url = `/images/${req.file.filename}`;
-  const sql = 'insert into "posts" ("title", "description", "price", "imgUrl", "userId") values ($1, $2, $3, $4, $5) returning *';
-  const params = [title, description, price, url, 1];
+  app.post('/api/sessions/', uploadsMiddleware, (req, res, next) => {
+    const { title, description, price } = req.body;
+    if (!title || !description) {
+      throw new ClientError(400, 'title and description are required fields');
+    }
+    const url = `/images/${req.file.filename}`;
+    const sql = 'insert into "posts" ("title", "description", "price", "imgUrl", "userId") values ($1, $2, $3, $4, $5) returning *';
+    const params = [title, description, price, url, 1];
 
-  db.query(sql, params)
-    .then(response => {
-      res.status(201).json(response.rows[0]);
-    })
-    .catch(err => next(err));
-});
+    db.query(sql, params)
+      .then(response => {
+        res.status(201).json(response.rows[0]);
+      })
+      .catch(err => next(err));
+  });
 
-app.get('/api/sessions', (req, res, next) => {
-  const sql = 'select * from "posts" order by "postId" desc';
-  db.query(sql)
-    .then(response => {
-      res.status(200).json(response.rows);
-    })
-    .catch(err => next(err));
-});
+  app.get('/api/sessions', (req, res, next) => {
+    const sql = 'select * from "posts" order by "postId" desc';
+    db.query(sql)
+      .then(response => {
+        res.status(200).json(response.rows);
+      })
+      .catch(err => next(err));
+  });
 
-app.get('/api/sessions/:postId', (req, res, next) => {
-  const postId = Number(req.params.postId);
-  if (!Number(postId) || postId < 1) {
-    res.status(400).json({ error: 'post Id must be a positive integer' });
+  app.get('/api/sessions/:postId', (req, res, next) => {
+    const postId = Number(req.params.postId);
+    if (!Number(postId) || postId < 1) {
+      res.status(400).json({ error: 'post Id must be a positive integer' });
 
-  }
-  const sql = 'select "title", "description", "price", "imgUrl", "userId" from "posts" where "postId" = $1';
-  const params = [postId];
-  db.query(sql, params)
-    .then(response => {
-      const post = response.rows[0];
-      if (!post) {
-        res.status(400).json({
-          error: `cannot find post with postId ${postId}`
-        });
-        return;
-      }
-      res.json(post);
-    })
-    .catch(err => next(err));
-});
-app.post('/api/sessions/:recipientId', (req, res, next) => {
-  const message = `Hi, I would like to book this session for $${req.body.offerAmount}!`;
-  const postId = req.body.postId;
-  const { recipientId } = req.params;
-  if (!message) {
-    throw new ClientError(400, 'message is required field');
-  }
-  const sql = 'insert into "messages" ("message", "recipientId", "postId", "senderId") values ($1, $2, $3, $4) returning * ';
-  const params = [message, recipientId, postId, 2];
-  db.query(sql, params)
-    .then(response => {
-      const [message] = response.rows;
-      res.status(200).json(message);
-    })
-    .catch(err => next(err));
-});
+    }
+    const sql = 'select "title", "description", "price", "imgUrl", "userId" from "posts" where "postId" = $1';
+    const params = [postId];
+    db.query(sql, params)
+      .then(response => {
+        const post = response.rows[0];
+        if (!post) {
+          res.status(400).json({
+            error: `cannot find post with postId ${postId}`
+          });
+          return;
+        }
+        res.json(post);
+      })
+      .catch(err => next(err));
+  });
+  app.post('/api/sessions/:recipientId', (req, res, next) => {
+    const message = `Hi, I would like to book this session for $${req.body.offerAmount}!`;
+    const postId = req.body.postId;
+    const { recipientId } = req.params;
+    if (!message) {
+      throw new ClientError(400, 'message is required field');
+    }
+    const sql = 'insert into "messages" ("message", "recipientId", "postId", "senderId") values ($1, $2, $3, $4) returning * ';
+    const params = [message, recipientId, postId, 2];
+    db.query(sql, params)
+      .then(response => {
+        const [message] = response.rows;
+        res.status(200).json(message);
+      })
+      .catch(err => next(err));
+  });
 
-app.post('/api/auth/sign-in', (req, res, next) => {
-  const { username, password } = req.body;
-  if (!username || !password) {
-    throw new ClientError(401, 'invalid login');
-  }
-  const sql = 'select "username", "userId", "password" from "users" where username = $1';
-  const params = [username];
-  db.query(sql, params)
-    .then(result => {
-      const [user] = result.rows;
-      if (!user) {
-        throw new ClientError(401, 'invalid login');
-      }
-      const hashedPassword = result.rows[0].password;
-      const userId = result.rows[0].userId;
-      argon2
+  app.post('/api/auth/sign-in', (req, res, next) => {
+    const { username, password } = req.body;
+    if (!username || !password) {
+      throw new ClientError(401, 'invalid login');
+    }
+    const sql = 'select "username", "userId", "password" from "users" where username = $1';
+    const params = [username];
+    db.query(sql, params)
+      .then(result => {
+        const [user] = result.rows;
+        if (!user) {
+          throw new ClientError(401, 'invalid login');
+        }
+        const hashedPassword = result.rows[0].password;
+        const userId = result.rows[0].userId;
+        argon2
 
-        .verify(hashedPassword, password)
-        .then(isMatching => {
-          if (!isMatching) {
-            throw new ClientError(401, 'invalid login');
-          }
-          const payload = {
-            user: {
-              userId: userId,
-              username: username
+          .verify(hashedPassword, password)
+          .then(isMatching => {
+            if (!isMatching) {
+              throw new ClientError(401, 'invalid login');
             }
-          };
-          const token = jwt.sign(payload, process.env.TOKEN_SECRET);
-          payload.token = token;
-          res.status(201).json(payload);
-        })
-        .catch(err => next(err));
-    })
-    .catch(err => next(err));
-});
+            const payload = {
+              user: {
+                userId: userId,
+                username: username
+              }
+            };
+            const token = jwt.sign(payload, process.env.TOKEN_SECRET);
+            payload.token = token;
+            res.status(201).json(payload);
+          })
+          .catch(err => next(err));
+      })
+      .catch(err => next(err));
+  });
 
-app.get('/api/messages', authorizationMiddleware, (req, res, next) => {
-  const userId = req.user.user.userId;
-  // using a common table expression
-  const sql = `with "receivedOffers" as (
+  app.get('/api/messages', authorizationMiddleware, (req, res, next) => {
+    const userId = req.user.user.userId;
+    // using a common table expression
+    const sql = `with "receivedOffers" as (
     --get the columns
   select "u"."userId",
          "u"."username",
@@ -176,24 +185,21 @@ app.get('/api/messages', authorizationMiddleware, (req, res, next) => {
     --get the most recent message from each group of messages
   where "row number" = 1`;
 
-  const params = [userId];
-  db.query(sql, params)
-    .then(result => {
-      res.status(200).json(result.rows);
-    })
-    .catch(err => next(err));
-});
+    const params = [userId];
+    db.query(sql, params)
+      .then(result => {
+        res.status(200).json(result.rows);
+      })
+      .catch(err => next(err));
+  });
 
-app.get('/api/messages/:postId/:senderId', authorizationMiddleware, (req, res, next) => {
-  const { postId, senderId } = req.params;
-  const recipientId = req.user.user.userId;
-  const sql = `select "u"."userId",
+  app.get('/api/messages/:postId/:senderId', authorizationMiddleware, (req, res, next) => {
+    const { postId, senderId } = req.params;
+    const recipientId = req.user.user.userId;
+    const sql = `select "u"."userId",
               "u"."username",
-              "p"."postId",
-              "p"."title",
-              "p"."price",
-              "p"."imgUrl",
-              "m"."message"
+              "m"."message",
+              "m"."createdAt"
           from "messages" as "m"
           join "posts" as "p" using ("postId")
           join "users" as "u"
@@ -204,46 +210,73 @@ app.get('/api/messages/:postId/:senderId', authorizationMiddleware, (req, res, n
           ("recipientId" = $2 and "senderId" = $1)
           )
           order by "m"."createdAt" `;
-  const params = [recipientId, senderId, postId];
-  db.query(sql, params)
-    .then(response => {
-      const secondParams = [senderId];
-      const secondSql = `select "userId",
+    const params = [recipientId, senderId, postId];
+    db.query(sql, params)
+      .then(messageResult => {
+
+        const secondParams = [senderId];
+        const secondSql = `select "userId",
                                 "username"
                         from    "users"
                         where   "userId" = $1`;
-      db.query(secondSql, secondParams)
-        .then(user => {
-          res.status(200).json({
-            user: user.rows[0],
-            postId: response.rows[0].postId,
-            title: response.rows[0].title,
-            price: response.rows[0].price,
-            imgUrl: response.rows[0].imgUrl,
-            message: response.rows
-          });
+        db.query(secondSql, secondParams)
+          .then(userResult => {
+            const thirdParams = [postId];
+            const thirdSql = `select "postId",
+                                "title",
+                                "imgUrl",
+                                "price",
+                                "userId"
+                        from    "posts"
+                        where   "postId" = $1`;
+            db.query(thirdSql, thirdParams)
+              .then(postResult => {
+                res.status(200).json({
+                  user: userResult.rows[0],
+                  messages: messageResult.rows,
+                  post: postResult.rows[0]
+                });
+              })
+              .catch(err => next(err));
+          })
+          .catch(err => next(err));
+      })
+      .catch(err => next(err));
+  });
 
-        })
-        .catch(err => next(err));
-    })
-    .catch(err => next(err));
-});
-
-app.post('/api/messages', authorizationMiddleware, (req, res, next) => {
-  const senderId = req.user.user.userId;
-  const { reply, postId, recipient } = req.body;
-  const sql = `insert into "messages"
+  app.post('/api/messages', authorizationMiddleware, (req, res, next) => {
+    const senderId = req.user.user.userId;
+    const { reply, postId, recipient } = req.body;
+    const sql = `insert into "messages"
                ("message", "recipientId", "postId", "senderId")
                values ($1, $2, $3, $4)
                returning *
                `;
-  const params = [reply, recipient, postId, senderId];
-  db.query(sql, params)
-    .then(response => {
-      res.status(201).json(response.rows[0]);
-    })
-    .catch(err => next(err));
-  io.to(`${postId}-${recipient}-${senderId}`).emit(reply);
+    const params = [reply, recipient, postId, senderId];
+    db.query(sql, params)
+      .then(result => {
+        const secondSql = 'select "userId" from "posts" where "postId" = $1';
+        const secondParams = [postId];
+        db.query(secondSql, secondParams)
+          .then(postCreatorId => {
+            const postCreator = postCreatorId.rows[0].userId;
+            res.status(201).json(result.rows[0]);
+            result.rows[0].userId = senderId;
+            let buyer;
+            let seller;
+            if (postCreator === Number(recipient)) {
+              buyer = recipient;
+              seller = senderId;
+            } else {
+              seller = recipient;
+              buyer = senderId;
+            }
+            io.to(`${postId}-${buyer}-${seller}`).emit('message', result.rows[0]);
+          })
+          .catch(err => next(err));
+      })
+      .catch(err => next(err));
+  });
 });
 
 app.use(errorMiddleware);
