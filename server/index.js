@@ -280,6 +280,31 @@ app.post('/api/messages', authorizationMiddleware, (req, res, next) => {
     })
     .catch(err => next(err));
 });
+app.post('/api/auth/sign-up', (req, res, next) => {
+  const { email, username, password } = req.body;
+  if (!email || !username || !password) {
+    throw new ClientError(400, 'email, username, and password are required fields');
+  }
+  const sql = `
+              insert into "users"
+                          ("email",
+                          "username",
+                          "password")
+                   values ($1, $2, $3)
+                returning *
+  `;
+  argon2
+    .hash(password)
+    .then(hashedPassword => {
+      const params = [email, username, hashedPassword];
+      db.query(sql, params)
+        .then(result => {
+          res.status(201).json(result.rows[0]);
+        })
+        .catch(err => next(err));
+    })
+    .catch(err => next(err));
+});
 
 app.use(errorMiddleware);
 

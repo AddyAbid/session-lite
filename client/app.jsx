@@ -9,6 +9,7 @@ import SignIn from './pages/sign-in';
 import decodeToken from './lib/decode-token';
 import Inbox from './pages/inbox';
 import OfferThread from './pages/offer-thread';
+import SignUp from './pages/sign-up';
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -58,6 +59,9 @@ export default class App extends React.Component {
     }
     if (route.path === 'sign-in') {
       return <SignIn signIn={this.handleSignIn}/>;
+    }
+    if (route.path === 'sign-up') {
+      return <SignUp />;
     }
     if (route.path === 'inbox') {
       return <Inbox />;
