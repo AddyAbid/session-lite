@@ -55,8 +55,8 @@ class OfferThread extends React.Component {
         });
 
         socket.on('message', arg => {
-          const copyObj = [...this.state.messageIn];
-          const newMessageArray = copyObj.concat(arg);
+          const copyArray = [...this.state.messageIn];
+          const newMessageArray = copyArray.concat(arg);
           this.setState({ messageIn: newMessageArray });
         });
       });
