@@ -17,10 +17,11 @@ class OfferThread extends React.Component {
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleMessage = this.handleMessage.bind(this);
+    this.scrollToBottom = this.scrollToBottom.bind(this);
   }
 
   componentDidMount() {
-
+    this.scrollToBottom();
     const token = window.localStorage.getItem('user-jwt');
     fetch(`/api/messages/${this.props.postId}/${this.props.senderId}`, {
       headers: {
@@ -90,19 +91,26 @@ class OfferThread extends React.Component {
     this.setState({ reply: '' });
   }
 
+  componentDidUpdate() {
+    this.scrollToBottom();
+  }
+
+  scrollToBottom() {
+    this.messagesEnd && this.messagesEnd.scrollIntoView({ behavior: 'smooth' });
+  }
+
   render() {
     if (!this.state.messageIn) return null;
     const username = this.state.user.username;
     const { postId, title, price, imgUrl } = this.state.post;
     return (
       <div className='container'>
-
                 <div className='modal-row'>
                   <div className='col-half ml-desktop mt-desktop-2rem '>
                     <h3 className='roboto-4 display-inline pdl-mobile'>{username}</h3>
                     <div className='border-bottom-2px'></div>
                     <div className='modal-row height-align-bottom'>
-                      <div className='column-100'>
+              <div className='column-100' >
                 <div className="chat" >
                   {this.state.messageIn.map(
                     (message, index) => {
@@ -118,6 +126,10 @@ class OfferThread extends React.Component {
                     }
                   )
                       }
+                  <div
+                  style={{ float: 'left', clear: 'both' }}
+                  ref={el => { this.messagesEnd = el; }}>
+                  </div>
                         </div>
                       </div>
                     </div>
