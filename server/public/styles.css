@@ -289,6 +289,10 @@ body {
   border-bottom: 2px solid rgb(190, 190, 190);
 }
 
+.border-bottom-black {
+  border-bottom: 1.5px solid black;
+}
+
 .roboto-3 {
   font-family: Roboto, sans-serif;
   font-weight: 300;
@@ -326,13 +330,13 @@ body {
 a.inbox-anchor:link {
   text-decoration: inherit;
   color: inherit;
-  cursor: auto;
+  cursor: pointer;
 }
 
 a.inbox-anchor:visited {
   text-decoration: inherit;
   color: inherit;
-  cursor: auto;
+  cursor: pointer;
 }
 
 .height-align-bottom {
@@ -443,12 +447,21 @@ a.inbox-anchor:visited {
   border: 1px solid #cecece;
 }
 
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.font-size-9 {
+  font-size: 0.9rem;
+}
+
 i {
   cursor: pointer;
   margin: 1rem;
   color: black;
 }
 
-button {
+button,
+a {
   cursor: pointer;
 }
