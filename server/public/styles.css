@@ -172,6 +172,10 @@ body {
   padding: 5px 115px;
 }
 
+.pd-btn-98 {
+  padding: 5px 98px;
+}
+
 .modal {
   position: absolute;
   top: 0;
@@ -312,6 +316,10 @@ body {
 
 .mb-20px {
   margin-bottom: 20px;
+}
+
+.mb-2rem {
+  margin-bottom: 2rem;
 }
 
 a.inbox-anchor:link {

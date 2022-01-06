@@ -50,7 +50,8 @@ export default class App extends React.Component {
     }
     if (route.path === 'posts') {
       const postId = route.params.get('postId');
-      return <Details postId={postId}/>;
+
+      return <Details postId={postId} />;
     }
     if (route.path === 'sign-in') {
       return <SignIn signIn={this.handleSignIn}/>;

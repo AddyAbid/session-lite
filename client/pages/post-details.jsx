@@ -25,7 +25,6 @@ class Details extends React.Component {
   }
 
   render() {
-
     if (!this.state.post) return null;
     const { title, description, price, imgUrl } = this.state.post;
     return (
@@ -53,6 +52,7 @@ class Details extends React.Component {
                   <div className='border-top'></div>
 
                     <div className='submit-button text-align-center mt-1rem hide-mobile'>
+                  <a href={`#thread?postId=${this.state.postId}&userId=${2}`}><button className='mobile-width-100 raleway-500-white pd-btn-98 mb-2rem'>Message Artist</button></a>
                      <button onClick={this.closeModal} className='mobile-width-100 raleway-500 pd-btn'>Send Offer</button>
                     </div>
 
@@ -72,6 +72,7 @@ class Details extends React.Component {
             <div className='col-full'>
 
                 <div className='submit-button text-align-center mt-1rem hide-desktop'>
+              <button className='mobile-width-100 raleway-500-white pd-btn-98 mb-2rem'>Message Artist</button>
               <button onClick={this.closeModal} className='mobile-width-100 raleway-500 pd-btn'>Send Offer</button>
                 </div>
 

@@ -108,6 +108,7 @@ io.on('connection', socket => {
     const params = [message, recipientId, postId, 2];
     db.query(sql, params)
       .then(response => {
+
         const [message] = response.rows;
         res.status(200).json(message);
       })

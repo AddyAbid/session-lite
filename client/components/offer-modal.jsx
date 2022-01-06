@@ -34,6 +34,7 @@ class ShowModal extends React.Component {
         body: JSON.stringify(offerObj)
       })
       .then(response => response.json())
+
       .then(res => {
         this.props.close();
       })
