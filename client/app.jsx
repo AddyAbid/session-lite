@@ -10,6 +10,7 @@ import decodeToken from './lib/decode-token';
 import Inbox from './pages/inbox';
 import OfferThread from './pages/offer-thread';
 import SignUp from './pages/sign-up';
+import AppContext from './lib/app-context';
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -19,6 +20,7 @@ export default class App extends React.Component {
       route: parseRoute(window.location.hash)
     };
     this.handleSignIn = this.handleSignIn.bind(this);
+    this.handleSignOut = this.handleSignOut.bind(this);
   }
 
   componentDidMount() {
@@ -32,6 +34,7 @@ export default class App extends React.Component {
     const token = window.localStorage.getItem('user-jwt');
     const user = token ? decodeToken(token) : null;
     this.setState({ user, isAuthorizing: false });
+
   }
 
   handleSignIn(result) {
@@ -39,6 +42,12 @@ export default class App extends React.Component {
     window.localStorage.setItem('user-jwt', token);
     window.localStorage.setItem('userId', user.userId);
     this.setState({ user });
+  }
+
+  handleSignOut() {
+    window.localStorage.removeItem('user-jwt');
+    window.localStorage.removeItem('userId');
+    this.setState({ user: null });
   }
 
   renderPage() {
@@ -75,14 +84,18 @@ export default class App extends React.Component {
   }
 
   render() {
+    const { user, route } = this.state;
+    const { handleSignIn, handleSignOut } = this;
+    const contextValue = { user, route, handleSignIn, handleSignOut };
     return (
-    <>
-
-    <AppDrawer signIn={this.handleSignIn}/>
-        {this.renderPage()}
-     <Icons route={this.state.route}/>
-
-    </>
+      <AppContext.Provider value={contextValue}>
+        <>
+          <AppDrawer signOut={this.handleSignOut} signIn={this.handleSignIn} isAuthorizing={this.state.isAuthorizing} user={this.state.user}/>
+            {this.renderPage()}
+          <Icons route={this.state.route}/>
+      </>
+    </AppContext.Provider>
     );
   }
 }
+App.contextType = AppContext;

@@ -1,4 +1,5 @@
 import React from 'react';
+import AppContext from '../lib/app-context';
 class AppDrawer extends React.Component {
   constructor(props) {
     super(props);
@@ -6,7 +7,6 @@ class AppDrawer extends React.Component {
       drawerOpen: false
     };
     this.handleClickDrawer = this.handleClickDrawer.bind(this);
-
   }
 
   handleClickDrawer() {
@@ -16,6 +16,7 @@ class AppDrawer extends React.Component {
   }
 
   render() {
+    const { user, handleSignOut } = this.context;
     return (
      <div className='modal-row align-items-center border-bottom-desktop mt-1rem-header'>
        <div className='column-15 text-align-center'>
@@ -27,7 +28,12 @@ class AppDrawer extends React.Component {
           <div className='display-inline'><h1 className='display-inline raleway-400-header'>sessionLite</h1></div>
         </div>
         <div className='column-15 text-align-center'>
-         <a href='#sign-in'><button className='sign-in-button hide-mobile' >Sign in</button></a>
+        {user !== null &&
+           <a href='#sign-in'><button className='sign-in-button hide-mobile' onClick={handleSignOut}>Sign out</button></a>
+        }
+        { user === null &&
+           <a href='#sign-in'><button className='sign-in-button hide-mobile'>Sign in</button></a>
+        }
         </div>
         <div className={this.state.drawerOpen ? 'row margin-0' : 'hidden'}>
           <div className="column-25">
@@ -45,3 +51,4 @@ class AppDrawer extends React.Component {
 }
 
 export default AppDrawer;
+AppDrawer.contextType = AppContext;
