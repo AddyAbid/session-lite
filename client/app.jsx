@@ -25,9 +25,7 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
-
     window.addEventListener('hashchange', () => {
-
       this.setState({
         route: parseRoute(window.location.hash)
       });
@@ -35,7 +33,6 @@ export default class App extends React.Component {
     const token = window.localStorage.getItem('user-jwt');
     const user = token ? decodeToken(token) : null;
     this.setState({ user, isAuthorizing: false });
-
   }
 
   handleSignIn(result) {
@@ -62,7 +59,6 @@ export default class App extends React.Component {
     }
     if (route.path === 'posts') {
       const postId = route.params.get('postId');
-
       return <Details postId={postId} />;
     }
     if (route.path === 'sign-in') {
@@ -75,11 +71,8 @@ export default class App extends React.Component {
       return <Inbox />;
     }
     if (route.path === 'account') {
-
       return (
-
           <Account signOut={this.handleSignOut} user={this.state.user} />
-
       );
     }
     if (route.path === 'thread') {

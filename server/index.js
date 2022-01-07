@@ -305,7 +305,24 @@ app.post('/api/auth/sign-up', (req, res, next) => {
     })
     .catch(err => next(err));
 });
+app.post('/api/saved', (req, res, next) => {
+  const { postId, userId } = req.body;
+  const sql = `
+              insert into "saved"
+                          ("postId",
+                          "userId")
+                   values ($1, $2)
+                returning *
+              `;
+  const params = [postId, userId];
+  db.query(sql, params)
+    .then(result => {
+      const [savedPost] = result.rows;
+      res.status(201).json(savedPost);
+    })
+    .catch(err => next(err));
 
+});
 app.use(errorMiddleware);
 
 server.listen(process.env.PORT, () => {
