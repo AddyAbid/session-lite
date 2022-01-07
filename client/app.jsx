@@ -41,13 +41,11 @@ export default class App extends React.Component {
   handleSignIn(result) {
     const { user, token } = result;
     window.localStorage.setItem('user-jwt', token);
-    window.localStorage.setItem('userId', user.userId);
     this.setState({ user });
   }
 
   handleSignOut() {
     window.localStorage.removeItem('user-jwt');
-    window.localStorage.removeItem('userId');
     this.setState({ user: null });
   }
 
@@ -85,10 +83,9 @@ export default class App extends React.Component {
       );
     }
     if (route.path === 'thread') {
-      const userId = Number(window.localStorage.getItem('userId'));
       const postId = route.params.get('postId');
       const senderId = route.params.get('userId');
-      return <OfferThread postId={postId} senderId={senderId} userId={userId}/>;
+      return <OfferThread postId={postId} senderId={senderId} />;
     }
   }
 
