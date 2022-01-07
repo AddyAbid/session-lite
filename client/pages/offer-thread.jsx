@@ -9,7 +9,8 @@ class OfferThread extends React.Component {
       messageIn: null,
       user: null,
       post: null,
-      reply: ''
+      reply: '',
+      userId: null
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleMessage = this.handleMessage.bind(this);
@@ -28,7 +29,8 @@ class OfferThread extends React.Component {
         this.setState({
           messageIn: offerThread.messages,
           user: offerThread.user,
-          post: offerThread.post
+          post: offerThread.post,
+          userId: offerThread.user.userId
         });
         const buyerId = offerThread.user.userId;
         const sellerId = offerThread.post.userId;
@@ -105,8 +107,8 @@ class OfferThread extends React.Component {
                   (message, index) => {
                     return (
                       <div key={index}>
-                        <div className={message.userId === this.props.userId ? 'mine messages' : 'yours messages'}>
-                          <div className={message.userId === this.props.userId ? 'message out' : 'message in last'}>
+                        <div className={message.userId !== this.state.userId ? 'mine messages' : 'yours messages'}>
+                          <div className={message.userId !== this.state.userId ? 'message out' : 'message in last'}>
                             <p className='roboto-4'>{message.message}</p>
                           </div>
                         </div>

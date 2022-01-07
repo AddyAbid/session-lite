@@ -40,6 +40,13 @@ body {
   margin: 0;
 }
 
+.sign-out-mobile {
+  border: 1px solid rgb(255, 99, 60);
+  background-color: rgb(255, 99, 60);
+  color: white;
+  padding: 5px 0;
+}
+
 .text-align-center {
   text-align: center;
 }
@@ -453,6 +460,10 @@ a.inbox-anchor:visited {
 
 .font-size-9 {
   font-size: 0.9rem;
+}
+
+.font-1-quarter {
+  font-size: 1.25rem;
 }
 
 i {
