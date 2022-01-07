@@ -13,9 +13,18 @@ class Details extends React.Component {
   }
 
   componentDidMount() {
-    fetch(`/api/sessions/${this.props.postId}`)
+    const token = window.localStorage.getItem('user-jwt');
+    fetch(`/api/sessions/${this.props.postId}`, {
+      headers: {
+        'X-Access-Token': token
+      }
+    })
       .then(res => res.json())
-      .then(post => this.setState({ post: post, postId: this.props.postId }))
+      .then(post => {
+
+        this.setState({ post: post, postId: this.props.postId });
+      })
+
       .catch(err => console.error(err));
 
   }

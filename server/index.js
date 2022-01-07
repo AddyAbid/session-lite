@@ -35,7 +35,6 @@ io.on('connection', socket => {
         }
         socket.join(`${postId}-${sellerId}-${buyerId}`);
       }
-
     });
 });
 const db = new pg.Pool({
@@ -77,16 +76,27 @@ app.get('/api/sessions', (req, res, next) => {
     .catch(err => next(err));
 });
 
-app.get('/api/sessions/:postId', (req, res, next) => {
+app.get('/api/sessions/:postId', authorizationMiddleware, (req, res, next) => {
   const postId = Number(req.params.postId);
+  const userId = req.user.user.userId;
   if (!Number(postId) || postId < 1) {
     res.status(400).json({ error: 'post Id must be a positive integer' });
 
   }
-  const sql = 'select "title", "description", "price", "imgUrl", "userId" from "posts" where "postId" = $1';
-  const params = [postId];
+  const sql = `select   "p"."title",
+                        "p"."description",
+                        "p"."price",
+                        "p"."imgUrl",
+                        ("s"."userId" is not null) as "isSaved"
+                   from "posts" as "p"
+              left join "saved" as "s"
+                     on ("s"."userId" = $2 and "p"."postId" = "s"."postId")
+                  where "p"."postId" = $1
+                                  `;
+  const params = [postId, userId];
   db.query(sql, params)
     .then(response => {
+
       const post = response.rows[0];
       if (!post) {
         res.status(400).json({
@@ -94,7 +104,7 @@ app.get('/api/sessions/:postId', (req, res, next) => {
         });
         return;
       }
-      res.json(post);
+      res.status(200).json(post);
     })
     .catch(err => next(err));
 });
@@ -106,7 +116,13 @@ app.post('/api/sessions/:recipientId', authorizationMiddleware, (req, res, next)
   if (!message) {
     throw new ClientError(400, 'message is required field');
   }
-  const sql = 'insert into "messages" ("message", "recipientId", "postId", "senderId") values ($1, $2, $3, $4) returning * ';
+  const sql = `insert into "messages"
+                           ("message",
+                           "recipientId",
+                           "postId",
+                           "senderId")
+                    values ($1, $2, $3, $4)
+                 returning * `;
   const params = [message, recipientId, postId, userId];
   db.query(sql, params)
     .then(response => {
