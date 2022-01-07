@@ -21,11 +21,14 @@ class AppDrawer extends React.Component {
      <div className='modal-row align-items-center border-bottom-desktop mt-1rem-header'>
        <div className='column-15 text-align-center'>
           <div className='hide-mobile '>
-             <i className="fas fa-bars fa-2x hamburger-menu-orange" onClick={this.handleClickDrawer} id={this.state.drawerOpen ? '' : 'open'}></i>
+            {
+              user !== null &&
+              <i className="fas fa-bars fa-2x hamburger-menu-orange" onClick={this.handleClickDrawer} id={this.state.drawerOpen ? '' : 'open'}></i>
+            }
          </div>
         </div>
          <div className='column-70 text-align-center '>
-          <div className='display-inline'><h1 className='display-inline raleway-400-header'>sessionLite</h1></div>
+          <h1 className=' raleway-400-header'>sessionLite</h1>
         </div>
         <div className='column-15 text-align-center'>
         {user !== null &&

@@ -10,6 +10,7 @@ import decodeToken from './lib/decode-token';
 import Inbox from './pages/inbox';
 import OfferThread from './pages/offer-thread';
 import SignUp from './pages/sign-up';
+import Account from './pages/account';
 import AppContext from './lib/app-context';
 export default class App extends React.Component {
   constructor(props) {
@@ -75,6 +76,14 @@ export default class App extends React.Component {
     if (route.path === 'inbox') {
       return <Inbox />;
     }
+    if (route.path === 'account') {
+
+      return (
+
+          <Account signOut={this.handleSignOut} user={this.state.user} />
+
+      );
+    }
     if (route.path === 'thread') {
       const userId = Number(window.localStorage.getItem('userId'));
       const postId = route.params.get('postId');
@@ -92,7 +101,7 @@ export default class App extends React.Component {
         <>
           <AppDrawer signOut={this.handleSignOut} signIn={this.handleSignIn} isAuthorizing={this.state.isAuthorizing} user={this.state.user}/>
             {this.renderPage()}
-          <Icons route={this.state.route}/>
+          <Icons route={this.state.route} />
       </>
     </AppContext.Provider>
     );

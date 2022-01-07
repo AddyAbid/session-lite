@@ -19,7 +19,9 @@ function Icons(props) {
           </a>
         </div>
         <div className='column-fifth'>
-          <i className="fas fa-user fa-2x"></i>
+          <a href='#account'>
+           <i className={props.route.path === 'account' ? 'fas fa-user fa-2x orange' : 'fas fa-user fa-2x'}></i>
+          </a>
         </div>
         <div className='column-fifth'>
           <i className="far fa-heart fa-2x"></i>
