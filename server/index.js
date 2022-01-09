@@ -87,6 +87,7 @@ app.get('/api/sessions/:postId', authorizationMiddleware, (req, res, next) => {
                         "p"."description",
                         "p"."price",
                         "p"."imgUrl",
+                        "p"."userId",
                         ("s"."userId" is not null) as "isSaved"
                    from "posts" as "p"
               left join "saved" as "s"
@@ -321,8 +322,10 @@ app.post('/api/auth/sign-up', (req, res, next) => {
     })
     .catch(err => next(err));
 });
-app.post('/api/saved', (req, res, next) => {
-  const { postId, userId } = req.body;
+
+app.put('/api/saved', authorizationMiddleware, (req, res, next) => {
+  const { postId } = req.body;
+  const userId = req.user.user.userId;
   const sql = `
               insert into "saved"
                           ("postId",
@@ -338,6 +341,23 @@ app.post('/api/saved', (req, res, next) => {
     })
     .catch(err => next(err));
 
+});
+
+app.delete('/api/saved/remove', authorizationMiddleware, (req, res, next) => {
+  const { postId } = req.body;
+  const userId = req.user.user.userId;
+
+  const sql = `delete from "saved"
+                     where "postId" = $1
+                       and "userId" = $2
+                    `;
+  const params = [postId, userId];
+  db.query(sql, params)
+    .then(result => {
+      const removedPost = result.rows[0];
+      res.status(200).json(removedPost);
+    })
+    .catch(err => next(err));
 });
 app.use(errorMiddleware);
 

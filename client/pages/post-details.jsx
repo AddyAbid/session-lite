@@ -7,12 +7,15 @@ class Details extends React.Component {
     this.state = {
       post: null,
       modal: false,
-      postId: null
+      postId: null,
+      isSaved: false
     };
     this.closeModal = this.closeModal.bind(this);
+    this.toggleSave = this.toggleSave.bind(this);
   }
 
   componentDidMount() {
+    // console.log(this.state);
     const token = window.localStorage.getItem('user-jwt');
     fetch(`/api/sessions/${this.props.postId}`, {
       headers: {
@@ -20,17 +23,53 @@ class Details extends React.Component {
       }
     })
       .then(res => res.json())
+
       .then(post => {
-
         this.setState({ post: post, postId: this.props.postId });
+        if (this.state.post.isSaved) {
+          this.setState({ isSaved: true });
+        }
       })
-
       .catch(err => console.error(err));
 
   }
 
   closeModal(event) {
     this.setState({ modal: !this.state.modal });
+  }
+
+  toggleSave(event) {
+    const token = window.localStorage.getItem('user-jwt');
+    const postObj = {
+      postId: this.state.postId
+    };
+    if (!this.state.isSaved) {
+      this.setState({
+        isSaved: true
+      });
+      fetch('/api/saved', {
+        method: 'PUT',
+        body: JSON.stringify(postObj),
+        headers: {
+          'X-Access-Token': token,
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(result => result.json())
+        .catch(err => console.error(err));
+    } else {
+      this.setState({
+        isSaved: false
+      });
+      fetch('/api/saved/remove', {
+        method: 'DELETE',
+        body: JSON.stringify(postObj),
+        headers: {
+          'X-Access-Token': token,
+          'Content-Type': 'application/json'
+        }
+      });
+    }
   }
 
   render() {
@@ -54,7 +93,21 @@ class Details extends React.Component {
                   <div className='border-top'></div>
                   <h3 className='raleway-800'>{title}</h3>
                   <h4 className='raleway-300'>${price}/hour</h4>
-                  <h5></h5>
+                {
+                  !this.state.isSaved &&
+                  <div className='modal-row align-items-center roboto-4-save'>
+                      <i className="far fa-heart ml-0" onClick={this.toggleSave}></i>
+                  <p>Save</p>
+                  </div>
+                }
+                {
+                  this.state.isSaved &&
+                  <div className='modal-row align-items-center roboto-4-save '>
+                      <i className="fas fa-heart heart-red ml-0" onClick={this.toggleSave}></i>
+                  <p>Saved</p>
+                  </div>
+                }
+
                </div>
               </div>
               <div className='row-details'>
@@ -84,6 +137,15 @@ class Details extends React.Component {
                 <div className='submit-button text-align-center mt-1rem hide-desktop'>
               <a href={`#thread?postId=${this.state.postId}&userId=${userId}`}> <button className='mobile-width-100 raleway-500-white pd-btn-98 mb-2rem'>Message Artist</button></a>
               <button onClick={this.closeModal} className='mobile-width-100 raleway-500 pd-btn'>Send Offer</button>
+              {
+                !this.state.isSaved &&
+                <i className="far fa-heart" onClick={this.toggleSave}></i>
+              }
+              {
+                this.state.isSaved &&
+                <i className="fas fa-heart" onClick={this.toggleSave}></i>
+              }
+
                 </div>
 
             </div>
