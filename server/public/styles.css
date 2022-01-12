@@ -279,6 +279,10 @@ body {
   margin-top: 8rem;
 }
 
+.ml-0 {
+  margin-left: 0;
+}
+
 .roboto-7 {
   font-family: Roboto, sans-serif;
   font-weight: 700;
@@ -423,6 +427,15 @@ a.inbox-anchor:visited {
 
 .text-align-left {
   text-align: left;
+}
+
+.heart-red {
+  color: red;
+}
+
+.roboto-4-save {
+  font-family: Roboto, sans-serif;
+  font-weight: 400;
 }
 
 .send-message-button {
