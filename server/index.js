@@ -19,7 +19,7 @@ io.on('connection', socket => {
   const seller = Number(socket.handshake.query.seller);
   const postId = socket.handshake.query.postId;
   jwt
-    .verify(token, 'changeMe', (err, verifiedToken) => {
+    .verify(token, 'D8K?Aa$+pdfu_Z5T', (err, verifiedToken) => {
       if (err) {
         verifiedToken = null;
       } else {
