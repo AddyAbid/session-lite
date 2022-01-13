@@ -56,7 +56,7 @@ app.post('/api/sessions/', authorizationMiddleware, uploadsMiddleware, (req, res
   if (!title || !description) {
     throw new ClientError(400, 'title and description are required fields');
   }
-  const url = `/images/${req.file.filename}`;
+  const url = req.file.location;
   const sql = 'insert into "posts" ("title", "description", "price", "imgUrl", "userId") values ($1, $2, $3, $4, $5) returning *';
   const params = [title, description, price, url, userId];
 
