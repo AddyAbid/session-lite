@@ -81,7 +81,6 @@ app.get('/api/sessions/:postId', authorizationMiddleware, (req, res, next) => {
   const userId = req.user.user.userId;
   if (!Number(postId) || postId < 1) {
     res.status(400).json({ error: 'post Id must be a positive integer' });
-
   }
   const sql = `select   "p"."title",
                         "p"."description",
