@@ -15,7 +15,6 @@ class Details extends React.Component {
   }
 
   componentDidMount() {
-    // console.log(this.state);
     const token = window.localStorage.getItem('user-jwt');
     fetch(`/api/sessions/${this.props.postId}`, {
       headers: {
@@ -137,15 +136,6 @@ class Details extends React.Component {
                 <div className='submit-button text-align-center mt-1rem hide-desktop'>
               <a href={`#thread?postId=${this.state.postId}&userId=${userId}`}> <button className='mobile-width-100 raleway-500-white pd-btn-98 mb-2rem'>Message Artist</button></a>
               <button onClick={this.closeModal} className='mobile-width-100 raleway-500 pd-btn'>Send Offer</button>
-              {
-                !this.state.isSaved &&
-                <i className="far fa-heart" onClick={this.toggleSave}></i>
-              }
-              {
-                this.state.isSaved &&
-                <i className="fas fa-heart" onClick={this.toggleSave}></i>
-              }
-
                 </div>
 
             </div>
