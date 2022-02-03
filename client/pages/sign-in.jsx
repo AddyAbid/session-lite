@@ -55,6 +55,7 @@ class SignIn extends React.Component {
 
       .then(resolve => resolve.json())
       .then(res => {
+
         const token = res.token;
         if (token) {
           window.location.hash = 'marketplace';

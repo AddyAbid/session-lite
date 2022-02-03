@@ -243,6 +243,10 @@
   .border-top-2px-desktop-mobile {
     border-top: 2px solid #cecece;
   }
+
+  .font-20px {
+    font-size: 20px;
+  }
 }
 
 @media only screen and (max-width: 680px) {
@@ -301,5 +305,9 @@
 
   .border-top-2px-desktop-mobile {
     border-top: 2px solid #cecece;
+  }
+
+  .font-20px {
+    font-size: 15px;
   }
 }
