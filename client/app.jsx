@@ -12,6 +12,7 @@ import OfferThread from './pages/offer-thread';
 import SignUp from './pages/sign-up';
 import Account from './pages/account';
 import AppContext from './lib/app-context';
+
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -25,6 +26,7 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
+
     window.addEventListener('hashchange', () => {
       this.setState({
         route: parseRoute(window.location.hash)
@@ -87,8 +89,10 @@ export default class App extends React.Component {
     const { handleSignIn, handleSignOut } = this;
     const contextValue = { user, route, handleSignIn, handleSignOut };
     return (
+
       <AppContext.Provider value={contextValue}>
         <>
+
           <AppDrawer signOut={this.handleSignOut} signIn={this.handleSignIn} isAuthorizing={this.state.isAuthorizing} user={this.state.user}/>
             {this.renderPage()}
           <Icons route={this.state.route} />

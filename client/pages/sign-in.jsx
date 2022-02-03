@@ -52,6 +52,7 @@ class SignIn extends React.Component {
       },
       body: JSON.stringify(formData)
     })
+
       .then(resolve => resolve.json())
       .then(res => {
         const token = res.token;

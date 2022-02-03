@@ -310,6 +310,15 @@ body {
   font-size: 14px;
 }
 
+.roboto-medium {
+  font-family: Roboto, sans-serif;
+  font-weight: normal;
+}
+
+.font-20px {
+  font-size: 20px;
+}
+
 .inbox-img {
   height: 85px;
   width: 120px;
@@ -324,6 +333,10 @@ body {
 
 .font-size-1-2 {
   font-size: 1.2rem;
+}
+
+.margin-top-15 {
+  margin-top: 15%;
 }
 
 .mt-20px {
