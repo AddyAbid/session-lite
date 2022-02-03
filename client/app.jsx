@@ -84,29 +84,23 @@ export default class App extends React.Component {
   }
 
   render() {
-
     if (!navigator.onLine) {
       return (
         <h1 className='modal-row justify-content-center margin-top-15 roboto-medium'>Uh oh, something went wrong</h1>
       );
     }
-
     const { user, route } = this.state;
     const { handleSignIn, handleSignOut } = this;
     const contextValue = { user, route, handleSignIn, handleSignOut };
-
     return (
-
       <AppContext.Provider value={contextValue}>
         <>
-
             <AppDrawer signOut={this.handleSignOut} signIn={this.handleSignIn} isAuthorizing={this.state.isAuthorizing} user={this.state.user} />
             {this.renderPage()}
             {
               user &&
             <Icons route={this.state.route} />
           }
-
           </>
     </AppContext.Provider>
     );

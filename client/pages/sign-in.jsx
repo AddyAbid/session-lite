@@ -30,7 +30,6 @@ class SignIn extends React.Component {
         if (token) {
           window.location.hash = 'marketplace';
           this.props.signIn(res);
-
         } else {
           window.location.hash = 'sign-in';
           this.setState({ incorrectPassword: true });
@@ -52,15 +51,12 @@ class SignIn extends React.Component {
       },
       body: JSON.stringify(formData)
     })
-
       .then(resolve => resolve.json())
       .then(res => {
-
         const token = res.token;
         if (token) {
           window.location.hash = 'marketplace';
           this.props.signIn(res);
-
         } else {
           window.location.hash = 'sign-in';
           this.setState({ incorrectPassword: true });
@@ -78,7 +74,6 @@ class SignIn extends React.Component {
   }
 
   render() {
-
     return (
       <div className='container'>
         <div className='sign-in-form'>
@@ -113,7 +108,6 @@ class SignIn extends React.Component {
               </form>
               <form onSubmit={this.handleDemoSubmit}>
                 <button type='submit' className='mobile-width-100 raleway-500-white width-100 pd-btn-98 mb-2rem'>Demo</button>
-
               </form>
               <p className='roboto-4 font-size-9'>
                 Don&apos;t have an account yet?
