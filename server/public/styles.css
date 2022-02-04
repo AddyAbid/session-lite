@@ -184,8 +184,16 @@ body {
   padding: 5px 98px;
 }
 
+.pb-5rem {
+  padding-bottom: 5rem;
+}
+
+.mr-10px {
+  margin-right: 10px;
+}
+
 .modal {
-  position: absolute;
+  position: fixed;
   top: 0;
   bottom: 0;
   left: 0;

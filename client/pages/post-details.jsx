@@ -95,14 +95,14 @@ class Details extends React.Component {
                 {
                   !this.state.isSaved &&
                   <div className='modal-row align-items-center roboto-4-save'>
-                      <i className="far fa-heart ml-0" onClick={this.toggleSave}></i>
+                      <i className="far fa-heart ml-0 mr-10px" onClick={this.toggleSave}></i>
                   <p>Save</p>
                   </div>
                 }
                 {
                   this.state.isSaved &&
                   <div className='modal-row align-items-center roboto-4-save '>
-                      <i className="fas fa-heart heart-red ml-0" onClick={this.toggleSave}></i>
+                      <i className="fas fa-heart heart-red ml-0 mr-10px" onClick={this.toggleSave}></i>
                   <p>Saved</p>
                   </div>
                 }
@@ -131,7 +131,7 @@ class Details extends React.Component {
                 </div>
                 <h4 className='raleway-400-sm'>{description}</h4>
               </div>
-            <div className='col-full'>
+            <div className='col-full pb-5rem'>
 
                 <div className='submit-button text-align-center mt-1rem hide-desktop'>
               <a href={`#thread?postId=${this.state.postId}&userId=${userId}`}> <button className='mobile-width-100 raleway-500-white pd-btn-98 mb-2rem'>Message Artist</button></a>
