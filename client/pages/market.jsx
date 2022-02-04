@@ -14,12 +14,15 @@ class MarketPlace extends React.Component {
       .then(postCards => {
         this.setState({ posts: postCards });
       });
-
   }
 
   render() {
     return (
       <div className='container'>
+        {
+          this.state.posts.length === 0 &&
+          <h2 className='font-20px margin-top-15 roboto-medium modal-row justify-content-center'>Sorry, there are currently no sessions to browse ):</h2>
+        }
         <div className='market-row'>
           {this.state.posts.map(
             post => {
@@ -37,7 +40,6 @@ class MarketPlace extends React.Component {
               );
             }
           )}
-
         </div>
       </div>
 
