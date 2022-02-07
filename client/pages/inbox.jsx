@@ -36,7 +36,6 @@ class Inbox extends React.Component {
         <div className='container'>
           {
             this.state.message.length === 0 &&
-
             <h2 className='font-20px margin-top-15 roboto-medium modal-row justify-content-center'>No new messages at this time</h2>
           }
         </div>
