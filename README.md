@@ -72,4 +72,7 @@ Reason for build
    sudo service postgresql start
    ```
 4. Start project and view it at [local host 3000](http://localhost:3000/)
+    ```
+    npm run dev
+    ```
 
