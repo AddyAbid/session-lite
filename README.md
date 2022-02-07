@@ -53,6 +53,5 @@ Reason for build
 
 # Getting Started
 
-1. ```git clone git@github.com:addy-abid/session-lite.git
-cd final project```
+1. ```git clone git@github.com:addy-abid/session-lite.git```
 
