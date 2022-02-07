@@ -37,6 +37,7 @@ Reason for build
 * User can reply to offers
 * User can send message to seller
 * User can save a post
+<img src="https://user-images.githubusercontent.com/85080021/152854942-ff311baa-98ea-4033-9119-a734ff60ec4a.gif"  width="200"/>
 
 **Future Features**
 
