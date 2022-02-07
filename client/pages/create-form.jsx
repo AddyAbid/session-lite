@@ -3,7 +3,6 @@ import React from 'react';
 class FormPage extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
       title: '',
       description: '',
@@ -58,13 +57,12 @@ class FormPage extends React.Component {
         this.setState({ description: '' });
         this.fileInputRef.current.value = null;
       })
+      .catch(err => console.error(err))
       .catch(err => console.error(err));
-
   }
 
   render() {
     return (
-
       <div className='container'>
         <form onSubmit={this.handleSubmit}>
         <div className='row mt-3rem'>
@@ -72,16 +70,13 @@ class FormPage extends React.Component {
             <div className='img-upload'>
             <img
               className='placeholder-img'
-              // src={this.state.url}
                src={this.state.url}/>
-
               <input
               type='file'
               name='image'
               required
               ref={this.fileInputRef}
               onChange={this.handleImageChange}
-
               accept='.png, .jpg, .jpeg, .gif' />
             </div>
           </div>
@@ -129,7 +124,6 @@ class FormPage extends React.Component {
             </div>
           </div>
         </div>
-
     </form>
       </div>
     );

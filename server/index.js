@@ -96,7 +96,6 @@ app.get('/api/sessions/:postId', authorizationMiddleware, (req, res, next) => {
   const params = [postId, userId];
   db.query(sql, params)
     .then(response => {
-
       const post = response.rows[0];
       if (!post) {
         res.status(400).json({
@@ -126,7 +125,6 @@ app.post('/api/sessions/:recipientId', authorizationMiddleware, (req, res, next)
   const params = [message, recipientId, postId, userId];
   db.query(sql, params)
     .then(response => {
-
       const [message] = response.rows;
       res.status(200).json(message);
     })
@@ -149,7 +147,6 @@ app.post('/api/auth/sign-in', (req, res, next) => {
       const hashedPassword = result.rows[0].password;
       const userId = result.rows[0].userId;
       argon2
-
         .verify(hashedPassword, password)
         .then(isMatching => {
           if (!isMatching) {
@@ -232,7 +229,6 @@ app.get('/api/messages/:postId/:senderId', authorizationMiddleware, (req, res, n
   const params = [recipientId, senderId, postId];
   db.query(sql, params)
     .then(messageResult => {
-
       const secondParams = [senderId];
       const secondSql = `select "userId",
                                 "username"
@@ -345,7 +341,6 @@ app.put('/api/saved', authorizationMiddleware, (req, res, next) => {
 app.delete('/api/saved/remove', authorizationMiddleware, (req, res, next) => {
   const { postId } = req.body;
   const userId = req.user.user.userId;
-
   const sql = `delete from "saved"
                      where "postId" = $1
                        and "userId" = $2

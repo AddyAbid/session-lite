@@ -22,7 +22,6 @@ class Details extends React.Component {
       }
     })
       .then(res => res.json())
-
       .then(post => {
         this.setState({ post: post, postId: this.props.postId });
         if (this.state.post.isSaved) {
@@ -85,7 +84,6 @@ class Details extends React.Component {
                   src={imgUrl} />
               </div>
             </div>
-
             <div className='col-half pd-left-2rem mt-mobile'>
               <div className='row-details'>
                 <div className='col-full'>
@@ -106,7 +104,6 @@ class Details extends React.Component {
                   <p>Saved</p>
                   </div>
                 }
-
                </div>
               </div>
               <div className='row-details'>
@@ -117,7 +114,6 @@ class Details extends React.Component {
                      <a href={`#thread?postId=${this.state.postId}&userId=${userId}`}><button className='mobile-width-100 raleway-500-white pd-btn-98 mb-2rem'>Message Artist</button></a>
                      <button onClick={this.closeModal} className='mobile-width-100 raleway-500 pd-btn'>Send Offer</button>
                     </div>
-
                 </div>
               </div>
             </div>
@@ -132,12 +128,10 @@ class Details extends React.Component {
                 <h4 className='raleway-400-sm'>{description}</h4>
               </div>
             <div className='col-full pb-5rem'>
-
                 <div className='submit-button text-align-center mt-1rem hide-desktop'>
               <a href={`#thread?postId=${this.state.postId}&userId=${userId}`}> <button className='mobile-width-100 raleway-500-white pd-btn-98 mb-2rem'>Message Artist</button></a>
               <button onClick={this.closeModal} className='mobile-width-100 raleway-500 pd-btn'>Send Offer</button>
                 </div>
-
             </div>
           </div>
         </div>

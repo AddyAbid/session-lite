@@ -49,7 +49,6 @@ class OfferThread extends React.Component {
           const newMessageArray = copyArray.concat(arg);
           this.setState({ messageIn: newMessageArray });
         });
-
       })
       .catch(err => console.error(err));
   }
@@ -131,7 +130,6 @@ class OfferThread extends React.Component {
               <button type='submit' className='send-message-button ml-2'>Send</button>
             </form>
           </div>
-
           <div className='col-half text-align-center mt-3 hide-mobile'>
             <img src={imgUrl} className='object-fit-inbox'></img>
             <div className='border-top-2px margin-auto mt-1rem'>
@@ -143,7 +141,6 @@ class OfferThread extends React.Component {
             </div>
           </div>
         </div>
-
       </div>
     );
   }
