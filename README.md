@@ -53,9 +53,23 @@ Reason for build
 
 # Getting Started
 
-1. 
+1. Clone repository
    ```
    git clone git@github.com:addy-abid/session-lite.git
-   cd final-project
+   cd session-lite
    ```
+2. Install all dependencies with NPM 
+  ```
+  npm install
+  ```
+3. Create copy of `.env.example`
+    ```
+    cp .env.exmaple
+    ```
+    
+4. Start postgreSQL
+   ```
+   sudo service postgresql start
+   ```
+4. Start project and view it at [local host 3000](http://localhost:3000/)
 
