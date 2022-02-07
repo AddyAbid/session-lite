@@ -59,9 +59,9 @@ Reason for build
    cd session-lite
    ```
 2. Install all dependencies with NPM 
-  ```
-  npm install
-  ```
+   ```
+   npm install
+   ```
 3. Create copy of `.env.example`
     ```
     cp .env.exmaple
