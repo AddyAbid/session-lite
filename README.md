@@ -56,5 +56,6 @@ Reason for build
 1. 
    ```
    git clone git@github.com:addy-abid/session-lite.git
+   cd final-project
    ```
 
