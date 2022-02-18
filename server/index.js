@@ -357,8 +357,12 @@ app.delete('/api/saved/remove', authorizationMiddleware, (req, res, next) => {
 app.get('/api/saved-posts', authorizationMiddleware, (req, res, next) => {
   const userId = req.user.user.userId;
   const sql = `
-              select * from "saved"
-              where "userId" = $1
+              select   "p".*,
+             ("s"."userId" is not null) as "isSaved"
+                   from "posts" as "p"
+              left join "saved" as "s"
+                     on ("p"."postId" = "s"."postId")
+                   where "s"."userId" = $1
   `;
   const params = [userId];
   db.query(sql, params)
