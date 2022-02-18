@@ -353,6 +353,21 @@ app.delete('/api/saved/remove', authorizationMiddleware, (req, res, next) => {
     })
     .catch(err => next(err));
 });
+
+app.get('/api/saved-posts', authorizationMiddleware, (req, res, next) => {
+  const userId = req.user.user.userId;
+  const sql = `
+              select * from "saved"
+              where "userId" = $1
+  `;
+  const params = [userId];
+  db.query(sql, params)
+    .then(result => {
+      res.status(200).json(result.rows);
+    })
+    .catch(err => next(err));
+});
+
 app.use(errorMiddleware);
 
 server.listen(process.env.PORT, () => {
