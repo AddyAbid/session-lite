@@ -24,7 +24,9 @@ function Icons(props) {
           </a>
         </div>
         <div className='column-fifth'>
-          <i className="far fa-heart fa-2x"></i>
+          <a href='#saved'>
+            <i className={props.route.path === 'saved' ? 'far fa-heart fa-2x orange' : 'far fa-heart fa-2x'}></i>
+          </a>
         </div>
       </div>
   );
