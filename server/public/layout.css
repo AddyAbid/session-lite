@@ -22,8 +22,8 @@
   height: 100vh;
 }
 
-.height100-percent {
-  height: 100%;
+.height80-percent {
+  height: 80%;
 }
 
 .width-80 {
@@ -149,8 +149,8 @@
   align-items: center;
 }
 
-.align-items-start {
-  align-items: start;
+.align-items-end {
+  align-items: end;
 }
 
 .col-half,
@@ -289,6 +289,10 @@
 
   .border-bottom-desktop {
     border-bottom: 0;
+  }
+
+  .border-top-mobile {
+    border-top: 1px solid rgb(190, 190, 190);
   }
 
   .mt-1rem-header {

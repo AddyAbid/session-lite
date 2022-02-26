@@ -12,6 +12,7 @@ import OfferThread from './pages/offer-thread';
 import SignUp from './pages/sign-up';
 import Account from './pages/account';
 import SavedPosts from './pages/saved';
+// import MyPosts from './pages/my-posts';
 import AppContext from './lib/app-context';
 
 export default class App extends React.Component {

@@ -469,6 +469,10 @@ a.inbox-anchor:visited {
   text-align: end;
 }
 
+.height-80 {
+  height: 80vh;
+}
+
 .mt {
   margin-top: 1rem;
 }
@@ -494,6 +498,10 @@ a.inbox-anchor:visited {
 
 .font-1-quarter {
   font-size: 1.25rem;
+}
+
+.float-right {
+  float: right;
 }
 
 i {

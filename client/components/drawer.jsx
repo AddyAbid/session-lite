@@ -45,6 +45,7 @@ class AppDrawer extends React.Component {
             <a href='#form' className="block mb raleway-size" onClick={this.handleClickDrawer}>Post a Session</a>
             <a href='#inbox' className="block mb raleway-size" onClick={this.handleClickDrawer}>Inbox</a>
             <a href='#saved' className="block mb raleway-size" onClick={this.handleClickDrawer}>Saved</a>
+            <a href='#account' className="block mb raleway-size" onClick={this.handleClickDrawer}>My Account</a>
           </div>
           <div className="column-75 overlay" onClick={this.handleClickDrawer}>
           </div>
