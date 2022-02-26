@@ -25,7 +25,7 @@ io.on('connection', socket => {
       } else {
         let buyerId;
         let sellerId;
-        const userId = verifiedToken.user.userId;
+        const userId = verifiedToken.userId;
         if (userId === seller) {
           sellerId = seller;
           buyerId = buyer;
