@@ -12,6 +12,7 @@ import OfferThread from './pages/offer-thread';
 import SignUp from './pages/sign-up';
 import Account from './pages/account';
 import SavedPosts from './pages/saved';
+import MyPosts from './pages/my-posts';
 import AppContext from './lib/app-context';
 
 export default class App extends React.Component {
@@ -84,6 +85,9 @@ export default class App extends React.Component {
       const postId = route.params.get('postId');
       const senderId = route.params.get('userId');
       return <OfferThread postId={postId} senderId={senderId} />;
+    }
+    if (route.path === 'my-posts') {
+      return <MyPosts />;
     }
   }
 

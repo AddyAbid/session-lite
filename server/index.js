@@ -25,7 +25,7 @@ io.on('connection', socket => {
       } else {
         let buyerId;
         let sellerId;
-        const userId = verifiedToken.user.userId;
+        const userId = verifiedToken.userId;
         if (userId === seller) {
           sellerId = seller;
           buyerId = buyer;
@@ -52,7 +52,7 @@ app.use(jsonMiddleware);
 
 app.post('/api/sessions/', authorizationMiddleware, uploadsMiddleware, (req, res, next) => {
   const { title, description, price } = req.body;
-  const userId = req.user.user.userId;
+  const userId = req.user.userId;
   if (!title || !description) {
     throw new ClientError(400, 'title and description are required fields');
   }
@@ -78,7 +78,7 @@ app.get('/api/sessions', (req, res, next) => {
 
 app.get('/api/sessions/:postId', authorizationMiddleware, (req, res, next) => {
   const postId = Number(req.params.postId);
-  const userId = req.user.user.userId;
+  const userId = req.user.userId;
   if (!Number(postId) || postId < 1) {
     res.status(400).json({ error: 'post Id must be a positive integer' });
   }
@@ -111,7 +111,7 @@ app.post('/api/sessions/:recipientId', authorizationMiddleware, (req, res, next)
   const message = `Hi, I would like to book this session for $${req.body.offerAmount}!`;
   const postId = req.body.postId;
   const { recipientId } = req.params;
-  const userId = req.user.user.userId;
+  const userId = req.user.userId;
   if (!message) {
     throw new ClientError(400, 'message is required field');
   }
@@ -153,10 +153,8 @@ app.post('/api/auth/sign-in', (req, res, next) => {
             throw new ClientError(401, 'invalid login');
           }
           const payload = {
-            user: {
-              userId: userId,
-              username: username
-            }
+            userId: userId,
+            username: username
           };
           const token = jwt.sign(payload, process.env.TOKEN_SECRET);
           payload.token = token;
@@ -168,7 +166,7 @@ app.post('/api/auth/sign-in', (req, res, next) => {
 });
 
 app.get('/api/messages', authorizationMiddleware, (req, res, next) => {
-  const userId = req.user.user.userId;
+  const userId = req.user.userId;
   // using a common table expression
   const sql = `with "receivedOffers" as (
     --get the columns
@@ -211,7 +209,7 @@ app.get('/api/messages', authorizationMiddleware, (req, res, next) => {
 
 app.get('/api/messages/:postId/:senderId', authorizationMiddleware, (req, res, next) => {
   const { postId, senderId } = req.params;
-  const recipientId = req.user.user.userId;
+  const recipientId = req.user.userId;
   const sql = `select "u"."userId",
               "u"."username",
               "m"."message",
@@ -260,7 +258,7 @@ app.get('/api/messages/:postId/:senderId', authorizationMiddleware, (req, res, n
 });
 
 app.post('/api/messages', authorizationMiddleware, (req, res, next) => {
-  const senderId = req.user.user.userId;
+  const senderId = req.user.userId;
   const { reply, postId, recipient } = req.body;
   const sql = `insert into "messages"
                ("message", "recipientId", "postId", "senderId")
@@ -320,7 +318,7 @@ app.post('/api/auth/sign-up', (req, res, next) => {
 
 app.put('/api/saved', authorizationMiddleware, (req, res, next) => {
   const { postId } = req.body;
-  const userId = req.user.user.userId;
+  const userId = req.user.userId;
   const sql = `
               insert into "saved"
                           ("postId",
@@ -340,7 +338,7 @@ app.put('/api/saved', authorizationMiddleware, (req, res, next) => {
 
 app.delete('/api/saved/remove', authorizationMiddleware, (req, res, next) => {
   const { postId } = req.body;
-  const userId = req.user.user.userId;
+  const userId = req.user.userId;
   const sql = `delete from "saved"
                      where "postId" = $1
                        and "userId" = $2
@@ -355,7 +353,7 @@ app.delete('/api/saved/remove', authorizationMiddleware, (req, res, next) => {
 });
 
 app.get('/api/saved-posts', authorizationMiddleware, (req, res, next) => {
-  const userId = req.user.user.userId;
+  const userId = req.user.userId;
   const sql = `
               select   "p".*,
              ("s"."userId" is not null) as "isSaved"
@@ -372,6 +370,19 @@ app.get('/api/saved-posts', authorizationMiddleware, (req, res, next) => {
     .catch(err => next(err));
 });
 
+app.get('/api/my-posts', authorizationMiddleware, (req, res, next) => {
+  const userId = req.user.userId;
+  const sql = `
+              select * from "posts" where "userId" = $1
+  `;
+  const params = [userId];
+  db.query(sql, params)
+    .then(result => {
+      res.status(200).json(result.rows);
+    })
+    .catch(err => next(err));
+
+});
 app.use(errorMiddleware);
 
 server.listen(process.env.PORT, () => {
