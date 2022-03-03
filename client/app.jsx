@@ -14,7 +14,6 @@ import Account from './pages/account';
 import SavedPosts from './pages/saved';
 import MyPosts from './pages/my-posts';
 import AppContext from './lib/app-context';
-
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -41,7 +40,7 @@ export default class App extends React.Component {
   handleSignIn(result) {
     const { user, token } = result;
     window.localStorage.setItem('user-jwt', token);
-    this.setState({ user });
+    this.setState({ user: user });
   }
 
   handleSignOut() {
@@ -92,6 +91,7 @@ export default class App extends React.Component {
   }
 
   render() {
+    if (this.state.isAuthorizing) return null;
     if (!navigator.onLine) {
       return (
         <h1 className='modal-row justify-content-center margin-top-15 roboto-medium'>Uh oh, something went wrong</h1>
