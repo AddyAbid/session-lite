@@ -1,5 +1,5 @@
 body {
-  background-color: #f6f6f6;
+  background-color: #ededed;
 }
 
 .placeholder-img {
@@ -99,13 +99,20 @@ body {
 }
 
 .column-25 {
+  background: white;
   width: 250px;
+  height: 100%;
+  position: fixed;
   top: 0;
-  bottom: 0;
-  left: 0;
-  text-align: left;
-  padding-left: 20px;
-  position: absolute;
+  transition: transform 0.3s cubic-bezier(1, 0.04, 1, 1);
+  transform: translateX(-105%);
+  box-shadow: 4px 0 8px;
+  z-index: 3;
+  padding-left: 25px;
+  left: 265px;
+}
+
+.card-anchor {
   background-color: white;
 }
 
@@ -120,6 +127,17 @@ body {
 
 .hamburger-menu-orange {
   color: #dd8f34;
+}
+
+.shadow-border {
+  box-shadow: 0 3px 5px rgb(0 0 0 / 8%);
+}
+
+.card {
+  border-radius: 0 0 10px 10px;
+  background-color: white;
+  height: 4rem;
+  padding: 10px;
 }
 
 .raleway-500-menu {
@@ -355,18 +373,6 @@ body {
   margin-bottom: 2rem;
 }
 
-a.inbox-anchor:link {
-  text-decoration: inherit;
-  color: inherit;
-  cursor: pointer;
-}
-
-a.inbox-anchor:visited {
-  text-decoration: inherit;
-  color: inherit;
-  cursor: pointer;
-}
-
 .height-align-bottom {
   align-items: flex-end;
 }
@@ -510,7 +516,13 @@ i {
   color: black;
 }
 
-button,
-a {
+button {
   cursor: pointer;
+}
+
+a {
+  text-decoration: inherit;
+  color: inherit;
+  cursor: pointer;
+}
 }

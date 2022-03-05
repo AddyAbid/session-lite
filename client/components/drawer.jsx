@@ -18,7 +18,7 @@ class AppDrawer extends React.Component {
   render() {
     const { user, handleSignOut } = this.context;
     return (
-     <div className='modal-row align-items-center border-bottom-desktop mt-1rem-header'>
+     <div className='modal-row align-items-center shadow-border mt-1rem-header nav-modal'>
        <div className='column-15 text-align-center'>
           <div className='hide-mobile '>
             {
@@ -38,7 +38,7 @@ class AppDrawer extends React.Component {
            <a href='#sign-in'><button className='sign-in-button hide-mobile'>Sign in</button></a>
         }
         </div>
-        <div className={this.state.drawerOpen ? 'row margin-0' : 'hidden'}>
+        <div className={this.state.drawerOpen ? 'row margin-0 nav-open' : 'hidden'}>
           <div className="column-25">
             <h1 className='raleway-500-menu'>Menu</h1>
             <a href='#marketplace' className="block mb raleway-size" onClick={this.handleClickDrawer}>Marketplace</a>
