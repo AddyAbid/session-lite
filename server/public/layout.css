@@ -9,6 +9,11 @@
   margin: 0 3rem;
 }
 
+.marketplace-row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
 .modal-row {
   display: flex;
 }
@@ -218,9 +223,10 @@
   }
 
   .object-fit-market {
-    height: 125px;
-    width: 100%;
+    height: 300px;
+    width: 300px;
     object-fit: cover;
+    border-radius: 10px 10px 0 0;
   }
 
   .border-bottom-desktop {
