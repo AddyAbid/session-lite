@@ -32,19 +32,18 @@ class MyPosts extends React.Component {
               <h2 className='roboto-7 margin-bottom-0'>My Posts</h2>
             </div>
           </div>
-          <div className='market-row'>
+          <div className='market-row justify-content-center mt-2rem pb-5rem'>
             {this.state.posts.map(
               post => {
                 return (
-                  <div className='column-half pd-7 mb-desktop mr-2rem-desktop' key={post.postId} >
-                    <a href={`#posts?postId=${post.postId}`}>  <img src={post.imgUrl} className=' object-fit-market border-5' /></a>
-                    <h4 className='margin-0 roboto-5 hide-mobile'>{post.title}</h4>
-                    <h4 className='margin-0 raleway-400-price pt-8 hide-mobile'>${post.price}</h4>
-                    <div className='column-100 relative hide-desktop'>
-                      <div className='absolute-background'>
-                        <h3 className='margin-0 text-align-center raleway-500-price'>${post.price}</h3>
+                  <div className = ' pd-7 mb-desktop mr-2rem-desktop' key = { post.postId } >
+                    <a href={`#posts?postId=${post.postId}`} className="card-anchor">  <img src={post.imgUrl} className=' object-fit-market' />
+                      <div className="card">
+                        <h4 className='margin-0 roboto-5 '>{post.title}</h4>
+                        <h4 className='margin-0 raleway-400-price pt-8'>${post.price}</h4>
+
                       </div>
-                    </div>
+                    </a>
                   </div>
                 );
               }
