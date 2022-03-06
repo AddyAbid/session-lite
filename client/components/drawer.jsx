@@ -18,7 +18,7 @@ class AppDrawer extends React.Component {
   render() {
     const { user, handleSignOut } = this.context;
     return (
-     <div className='modal-row align-items-center shadow-border mt-1rem-header nav-modal'>
+     <div className='modal-row align-items-center shadow-border mt-1rem-header nav-modal nav-bar'>
        <div className='column-15 text-align-center'>
           <div className='hide-mobile '>
             {

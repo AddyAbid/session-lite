@@ -64,20 +64,23 @@ class FormPage extends React.Component {
   render() {
     return (
       <div className='container'>
-        <form onSubmit={this.handleSubmit}>
+        <form onSubmit={this.handleSubmit} className="pb-5rem">
         <div className='row mt-3rem'>
           <div className='col-half'>
             <div className='img-upload'>
+              <label>
             <img
-              className='placeholder-img'
+              className='placeholder-img input-style'
                src={this.state.url}/>
               <input
+              className='hidden'
               type='file'
               name='image'
               required
               ref={this.fileInputRef}
               onChange={this.handleImageChange}
               accept='.png, .jpg, .jpeg, .gif' />
+          </label>
             </div>
           </div>
           <div className='col-half pd-left-2rem mt-mobile'>
@@ -90,7 +93,7 @@ class FormPage extends React.Component {
               name='title'
               value={this.state.title}
               onChange={this.handleTitleChange}
-              className='display-block width-100 mb-desktop' />
+              className='display-block width-100 mb-desktop input-style' />
             <label htmlFor='price' className='roboto-4'>Pay per hour</label>
             <input
               required
@@ -101,14 +104,14 @@ class FormPage extends React.Component {
               placeholder='$0'
               value={this.state.price}
               onChange={this.handlePriceChange}
-              className='display-block' />
+              className='display-block input-style' />
           </div>
         </div>
         <div className='row mt-2rem'>
           <div className='col-full'>
             <label htmlFor='description' className='roboto-4'>Description</label>
             <textarea
-              className='width-100 resize-none'
+              className='width-100 resize-none input-style'
               rows={10}
               required
               type='text'

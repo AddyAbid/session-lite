@@ -1,9 +1,5 @@
 body {
-  background-color: #ededed;
-}
-
-.placeholder-img {
-  width: 100%;
+  background-color: #f6f6f6;
 }
 
 .mt-3rem {
@@ -26,6 +22,10 @@ body {
 
 .mt-1rem {
   margin-top: 1rem;
+}
+
+.mb-75px {
+  margin-bottom: 75px;
 }
 
 .margin-lr {
@@ -95,7 +95,7 @@ body {
   right: 0;
   left: 250px;
   top: 0;
-  position: absolute;
+  position: fixed;
 }
 
 .column-25 {
@@ -185,6 +185,30 @@ body {
   font-family: Raleway, sans-serif;
   font-weight: 400;
   font-size: 1rem;
+}
+
+.nav-bar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: white;
+}
+
+.input-style {
+  padding: 15px 10px;
+  width: 100%;
+  resize: none;
+  border: #dd8f34 solid 1px;
+  border-radius: 10px;
+  color: #444;
+  font-size: 0.9rem;
+  transition: 0.2s ease-out;
+}
+
+.placeholder-img {
+  width: 100%;
+  cursor: pointer;
+  padding: 0;
 }
 
 .object-fit {
@@ -350,7 +374,7 @@ body {
 
 .hover-highlight:hover {
   cursor: pointer;
-  background-color: rgb(235, 235, 235);
+  background-color: rgb(215, 215, 215);
 }
 
 .font-size-1-2 {

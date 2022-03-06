@@ -27,7 +27,7 @@ class MarketPlace extends React.Component {
           {this.state.posts.map(
             post => {
               return (
-          <div className=' pd-7 mb-desktop mr-2rem-desktop' key={post.postId} >
+          <div className=' pd-7 mb-desktop mr-2rem-desktop mb-75px' key={post.postId} >
           <a href={`#posts?postId=${post.postId}`} className="card-anchor">  <img src={post.imgUrl} className=' object-fit-market' />
             <div className="card">
               <h4 className='margin-0 roboto-5 '>{post.title}</h4>
