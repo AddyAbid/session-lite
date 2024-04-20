@@ -1,5 +1,6 @@
 require('dotenv/config');
 const pg = require('pg');
+
 const express = require('express');
 const errorMiddleware = require('./error-middleware');
 const staticMiddleware = require('./static-middleware');
@@ -37,6 +38,7 @@ io.on('connection', socket => {
       }
     });
 });
+
 const db = new pg.Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: {
@@ -57,7 +59,7 @@ app.post('/api/sessions/', authorizationMiddleware, uploadsMiddleware, (req, res
     throw new ClientError(400, 'title and description are required fields');
   }
   const url = req.file.location;
-  const sql = 'insert into "posts" ("title", "description", "price", "imgUrl", "userId") values ($1, $2, $3, $4, $5) returning *';
+  const sql = 'insert into "public1"."posts" ("title", "description", "price", "imgurl", "userid") values ($1, $2, $3, $4, $5) returning *';
   const params = [title, description, price, url, userId];
 
   db.query(sql, params)
@@ -68,7 +70,7 @@ app.post('/api/sessions/', authorizationMiddleware, uploadsMiddleware, (req, res
 });
 
 app.get('/api/sessions', (req, res, next) => {
-  const sql = 'select * from "posts" order by "postId" desc';
+  const sql = 'select * from "public1"."posts" order by "postid" desc';
   db.query(sql)
     .then(response => {
       res.status(200).json(response.rows);
@@ -85,13 +87,13 @@ app.get('/api/sessions/:postId', authorizationMiddleware, (req, res, next) => {
   const sql = `select   "p"."title",
                         "p"."description",
                         "p"."price",
-                        "p"."imgUrl",
-                        "p"."userId",
-                        ("s"."userId" is not null) as "isSaved"
-                   from "posts" as "p"
-              left join "saved" as "s"
-                     on ("s"."userId" = $2 and "p"."postId" = "s"."postId")
-                  where "p"."postId" = $1
+                        "p"."imgurl",
+                        "p"."userid",
+                        ("s"."userid" is not null) as "isSaved"
+                   from "public1"."posts" as "p"
+              left join "public1"."saved" as "s"
+                     on ("s"."userid" = $2 and "p"."postid" = "s"."postid")
+                  where "p"."postid" = $1
                                   `;
   const params = [postId, userId];
   db.query(sql, params)
@@ -136,7 +138,7 @@ app.post('/api/auth/sign-in', (req, res, next) => {
   if (!username || !password) {
     throw new ClientError(401, 'invalid login');
   }
-  const sql = 'select "username", "userId", "password" from "users" where username = $1';
+  const sql = 'select "username", "userid", "password" from "public1"."users" where username = $1';
   const params = [username];
   db.query(sql, params)
     .then(result => {
@@ -372,7 +374,7 @@ app.get('/api/saved-posts', authorizationMiddleware, (req, res, next) => {
 app.get('/api/my-posts', authorizationMiddleware, (req, res, next) => {
   const userId = req.user.userId;
   const sql = `
-              select * from "posts" where "userId" = $1
+              select * from "public1"."posts" where "userid" = $1
   `;
   const params = [userId];
   db.query(sql, params)
